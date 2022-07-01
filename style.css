@@ -1,0 +1,99 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    /* justify-content: center; */
+    grid-template-columns: repeat(3, 33%);
+    overflow: hidden;
+}
+
+.gameScreen {
+    display: grid;
+    grid-template-rows: 10% 90%;
+    background-color: black;
+    width: 100%;
+    height: 100%;
+}
+
+.top-stages {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 0;
+    justify-content: space-evenly;
+}
+
+.bottom-stages {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: space-evenly;
+    height: 100%;
+    width: 100%;
+}
+
+.stage {
+    height: 2%;
+    width: 100%;
+    display: flex;
+    background-image: url('./images/crane.png');
+        background-position: center;
+        background-size: 50% 130%;
+    z-index: 10;
+    background-color: black;
+}
+
+.upperstage {
+    height: 20%;
+    bottom: 0%;
+}
+
+.rotate1 {
+    transform: rotate(1.5deg);
+}
+
+.rotate2 {
+    transform: rotate(-1.5deg);
+}
+
+.stage:last-child {
+    width: 100%;
+}
+
+.stageblocks {
+    /* background-color: lightblue; */
+    width: 7.5%;
+    height: 100%;
+    margin: 0;
+}
+
+.black {
+    background-color: black;
+}
+
+.villain {
+    height: 5%;
+}
+
+.goComputer img {
+    height: 100%;
+    width: 100%;
+}
+
+.ladder {
+    /* background-color: white; */
+    background-image: url('./images/ladder.png');
+    /* background-color: black; */
+    background-position: center;
+    background-size: cover;
+    height: 600%;
+    width: 60%;
+    z-index: 1000;
+    margin-top: 15%;
+}
+
+
