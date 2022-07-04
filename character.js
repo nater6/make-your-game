@@ -54,8 +54,6 @@ function down(id, y_pos) {
     element.style.top = y_pos + 'px';
 }
 
-function ladderBoundries(x-coord, y-coord)
-
 
 export const main = () => {
 
