@@ -5,11 +5,30 @@ function place(id, x_pos, y_pos) {
     element.style.position = "absolute";
     element.style.left = x_pos.left + 'px';
     element.style.right = x_pos.right + 'px';
-    element.style.top = `${(document.getElementById("4").getBoundingClientRect().top) - element.getBoundingClientRect().height + 5}px`
+    let y = 0
 
-    console.log('top: ', element.style.top);
-    console.log('Height:', element.style.height);
-    console.log(document.getElementById("0").getBoundingClientRect().top);
+    const getBoundTop = (ind) => document.getElementById(ind).getBoundingClientRect().top
+    //If cline y is between 0 top and 1 top y = 0
+    if (y_pos < getBoundTop(0) && y_pos > getBoundTop(1)) y = 0
+    if (y_pos < getBoundTop(1) && y_pos > getBoundTop(2)) y = 1
+    if (y_pos < getBoundTop(2) && y_pos > getBoundTop(3)) y = 2
+    if (y_pos < getBoundTop(3) && y_pos > getBoundTop(4)) y = 3
+    if (y_pos < getBoundTop(4) && y_pos > getBoundTop(5)) y = 4
+    if (y_pos < getBoundTop(5) && y_pos > getBoundTop(6)) y = 5
+    if (y_pos < getBoundTop(6)) y = 6
+    console.log('0 ===', getBoundTop(0));
+    console.log('1 ===', getBoundTop(1));
+    console.log('2 ===', getBoundTop(2));
+    console.log('3 ===', getBoundTop(3));
+    console.log('4 ===', getBoundTop(4));
+    console.log('5 ===', getBoundTop(5));
+    console.log('6 ===', getBoundTop(6));
+
+
+    console.log(y_pos);
+    console.log(y);
+    element.style.top = `${document.getElementById(y).getBoundingClientRect().top - element.getBoundingClientRect().height + 5}px`
+
 }
 
 function jump(id, top, bottom) {
@@ -35,27 +54,11 @@ function down(id, y_pos) {
     element.style.top = y_pos + 'px';
 }
 
-function craneHeight() {
-    let character = document.querySelector('#box')
+function ladderBoundries(x-coord, y-coord)
 
-    if (crane % 2 !== 0) {
-        //height = tan(5) * left = 0.0875 * left
-
-    }
-}
 
 export const main = () => {
-    document.addEventListener("mousedown", e => {
-        const bottomCrane = document.getElementById("0")
-        const firstCrane = document.getElementById("1")
-        let bRect = bottomCrane.getBoundingClientRect()
-        let fRect = firstCrane.getBoundingClientRect()
 
-
-
-        console.log('Bottom crane: ', bRect.top);
-        console.log(e.clientY);
-    })
     document.addEventListener("keydown", (e) => {
 
         let box = document.getElementById("box").getBoundingClientRect();
@@ -64,6 +67,10 @@ export const main = () => {
         let right = parseInt(box.right);
         let left = parseInt(box.left);
         let top = parseInt(box.top)
+        console.log('top======', top);
+        // console.log('Crane 1)', document.getElementById("1").getBoundingClientRect().top);
+        // console.log('Crane 0)', document.getElementById("0").getBoundingClientRect().top);
+
 
         if (e.key === "ArrowRight") {
             place('box', { "right": right + 10, "left": left + 10 }, top)
