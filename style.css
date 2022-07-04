@@ -6,25 +6,25 @@ body {
     width: 100vw;
     height: 100vh;
     display: grid;
-    /* justify-content: center; */
+    justify-content: center;
     grid-template-columns: repeat(3, 33%);
     overflow: hidden;
 }
 
 .gameScreen {
     display: grid;
-    grid-template-rows: 10% 90%;
+    grid-template-rows: 15% 85%;
     background-color: black;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 .top-stages {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    margin-bottom: 0;
-    justify-content: space-evenly;
+    justify-content: center;
 }
 
 .bottom-stages {
@@ -41,8 +41,8 @@ body {
     width: 100%;
     display: flex;
     background-image: url('./images/crane.png');
-        background-position: center;
-        background-size: 50% 130%;
+    background-position: center;
+    background-size: 50% 130%;
     z-index: 10;
     background-color: black;
 }
@@ -80,8 +80,13 @@ body {
 }
 
 .goComputer img {
-    height: 100%;
-    width: 100%;
+    height: 50%;
+    width: 10%;
+    position: absolute;
+    /* background-image: url('./images/golang.png'); */
+    /* background-color: black; */
+    /* background-position: center; */
+    /* background-size: cover; */
 }
 
 .ladder {
@@ -96,4 +101,14 @@ body {
     margin-top: 15%;
 }
 
+.upperlad {
+    height: 500%;
+}
 
+#box {
+    height: 7%;
+    width: 3%;
+    position: absolute;
+    bottom: 10%;
+    z-index: 100 ;
+}
