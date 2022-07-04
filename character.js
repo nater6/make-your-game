@@ -1,8 +1,6 @@
-let crane = 0
-
 function place(id, x_pos, y_pos) {
     let element = document.getElementById(id);
-    element.style.position = "absolute";
+    element.style.position = 'absolute';
     element.style.left = x_pos.left + 'px';
     element.style.right = x_pos.right + 'px';
     let y = 0
@@ -30,27 +28,25 @@ function place(id, x_pos, y_pos) {
     element.style.top = `${document.getElementById(y).getBoundingClientRect().top - element.getBoundingClientRect().height + 5}px`
 
 }
-
 function jump(id, top, bottom) {
     let element = document.getElementById(id);
-    element.style.position = "absolute";
+    element.style.position = 'absolute';
     element.style.top = top + 'px';
     function down() {
-        element.style.top = bottom + "px"
-        console.log("here")
+        element.style.top = bottom + 'px';
+        console.log('here');
     }
     setTimeout(down, 100);
 }
-
 function up(id, y_pos) {
     let element = document.getElementById(id);
-    element.style.position = "absolute";
+    element.style.position = 'absolute';
     element.style.top = y_pos + 'px';
 }
 
 function down(id, y_pos) {
     let element = document.getElementById(id);
-    element.style.position = "absolute";
+    element.style.position = 'absolute';
     element.style.top = y_pos + 'px';
 }
 
@@ -73,20 +69,17 @@ export const main = () => {
         if (e.key === "ArrowRight") {
             place('box', { "right": right + 10, "left": left + 10 }, top)
         }
-        if (e.key === "ArrowLeft") {
-
-            place('box', { "right": right - 12, "left": left - 12 }, top)
+        if (e.key === 'ArrowLeft') {
+            place('box', { right: right - 12, left: left - 12 }, top);
         }
-        if (e.key === "ArrowUp") {
-
-            up('box', top - 10)
+        if (e.key === 'ArrowUp') {
+            up('box', top - 10);
         }
-        if (e.key === "ArrowDown") {
-            down('box', top + 10)
-
+        if (e.key === 'ArrowDown') {
+            down('box', top + 10);
         }
-        if (e.key === " ") {
-            jump('box', top - 40, top)
+        if (e.key === ' ') {
+            jump('box', top - 40, top);
         }
     })
 }
