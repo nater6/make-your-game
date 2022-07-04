@@ -1,9 +1,15 @@
+let crane = 0
+
 function place(id, x_pos, y_pos) {
     let element = document.getElementById(id);
     element.style.position = "absolute";
     element.style.left = x_pos.left + 'px';
     element.style.right = x_pos.right + 'px';
-    // element.style.top = y_pos+'px';
+    element.style.top = `${(document.getElementById("4").getBoundingClientRect().top) - element.getBoundingClientRect().height + 5}px`
+
+    console.log('top: ', element.style.top);
+    console.log('Height:', element.style.height);
+    console.log(document.getElementById("0").getBoundingClientRect().top);
 }
 
 function jump(id, top, bottom) {
@@ -29,18 +35,27 @@ function down(id, y_pos) {
     element.style.top = y_pos + 'px';
 }
 
-let crane = 0
-
 function craneHeight() {
     let character = document.querySelector('#box')
 
     if (crane % 2 !== 0) {
         //height = tan(5) * left = 0.0875 * left
-        
+
     }
 }
 
 export const main = () => {
+    document.addEventListener("mousedown", e => {
+        const bottomCrane = document.getElementById("0")
+        const firstCrane = document.getElementById("1")
+        let bRect = bottomCrane.getBoundingClientRect()
+        let fRect = firstCrane.getBoundingClientRect()
+
+
+
+        console.log('Bottom crane: ', bRect.top);
+        console.log(e.clientY);
+    })
     document.addEventListener("keydown", (e) => {
 
         let box = document.getElementById("box").getBoundingClientRect();
@@ -68,5 +83,5 @@ export const main = () => {
         if (e.key === " ") {
             jump('box', top - 40, top)
         }
-    })  
+    })
 }

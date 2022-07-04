@@ -53,11 +53,11 @@ body {
 }
 
 .rotate1 {
-    transform: rotate(1.5deg);
+    /* transform: rotate(1.5deg); */
 }
 
 .rotate2 {
-    transform: rotate(-1.5deg);
+    /* transform: rotate(-1.5deg); */
 }
 
 .stage:last-child {
