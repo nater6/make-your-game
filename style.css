@@ -115,3 +115,9 @@ body {
     bottom: 10%;
     z-index: 100;
 }
+
+.donkeyKong-class {
+    position: absolute;
+    bottom: 76%;
+    right: 60%;
+}
