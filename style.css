@@ -116,8 +116,27 @@ body {
     z-index: 100;
 }
 
-.donkeyKong-class {
+.donkey-kong-class {
     position: absolute;
-    bottom: 76%;
-    right: 60%;
+    bottom: 75.4%;
+    z-index: 100;
+}
+
+.donkeyKong-class img {
+    height: 8vh;
+}
+
+.donkey-kong-character {
+    height: 56px;
+    width: 79.4444444444px;
+    background: url('./images/donkeyKongSpritesheet.png');
+    animation: sprite 1s steps(18) infinite;
+}
+@keyframes sprite {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: -1430px;
+    }
 }

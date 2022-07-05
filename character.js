@@ -52,6 +52,14 @@ function down(id, y_pos) {
     element.style.position = 'absolute';
     element.style.top = y_pos + 'px';
 }
+const donkeyKongCharacter = () => {
+    const leftGameScreen = document
+        .querySelectorAll('.bottom-stages')[0]
+        .getBoundingClientRect().left;
+    const character = document.getElementsByClassName('donkey-kong-class')[0];
+    character.style.left = leftGameScreen + 'px';
+    console.log(character.style.left, leftGameScreen);
+};
 
 export const main = () => {
     document.addEventListener('keydown', (e) => {
@@ -80,4 +88,5 @@ export const main = () => {
             jump('box', top - 40, top);
         }
     });
+    donkeyKongCharacter();
 };
