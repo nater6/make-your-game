@@ -1,30 +1,30 @@
-let startingX = document.querySelector('#box').getBoundingClientRect().left;
-let startingY = document.querySelector('#box').getBoundingClientRect().top;
+let startingX = document.querySelector("#box").getBoundingClientRect().left;
+let startingY = document.querySelector("#box").getBoundingClientRect().top;
 let currentX = 0;
 let currentY = 0;
 
-let ladder_1 = document.getElementById('ladder_1').getBoundingClientRect();
-let ladder_2 = document.getElementById('ladder_2').getBoundingClientRect();
-let ladder_3 = document.getElementById('ladder_3').getBoundingClientRect();
-let ladder_4 = document.getElementById('ladder_4').getBoundingClientRect();
-let ladder_5 = document.getElementById('ladder_5').getBoundingClientRect();
-let ladder_6 = document.getElementById('ladder_6').getBoundingClientRect();
-let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
+let ladder_1 = document.getElementById("ladder_1").getBoundingClientRect();
+let ladder_2 = document.getElementById("ladder_2").getBoundingClientRect();
+let ladder_3 = document.getElementById("ladder_3").getBoundingClientRect();
+let ladder_4 = document.getElementById("ladder_4").getBoundingClientRect();
+let ladder_5 = document.getElementById("ladder_5").getBoundingClientRect();
+let ladder_6 = document.getElementById("ladder_6").getBoundingClientRect();
+let ladder_7 = document.getElementById("ladder_7").getBoundingClientRect();
 
 const CurrentLevel = (y_pos) => {
-    let y = 0;
-    const getBoundTop = (ind) =>
-        document.getElementById(ind).getBoundingClientRect().top;
-    //If cline y is between 0 top and 1 top y = 0
-    if (y_pos < getBoundTop(0) && y_pos > getBoundTop(1)) y = 0;
-    if (y_pos < getBoundTop(1) && y_pos > getBoundTop(2)) y = 1;
-    if (y_pos < getBoundTop(2) && y_pos > getBoundTop(3)) y = 2;
-    if (y_pos < getBoundTop(3) && y_pos > getBoundTop(4)) y = 3;
-    if (y_pos < getBoundTop(4) && y_pos > getBoundTop(5)) y = 4;
-    if (y_pos < getBoundTop(5) && y_pos > getBoundTop(6)) y = 5;
-    if (y_pos < getBoundTop(6)) y = 6;
+  let y = 0;
+  const getBoundTop = (ind) =>
+    document.getElementById(ind).getBoundingClientRect().top;
+  //If cline y is between 0 top and 1 top y = 0
+  if (y_pos < getBoundTop(0) && y_pos > getBoundTop(1)) y = 0;
+  if (y_pos < getBoundTop(1) && y_pos > getBoundTop(2)) y = 1;
+  if (y_pos < getBoundTop(2) && y_pos > getBoundTop(3)) y = 2;
+  if (y_pos < getBoundTop(3) && y_pos > getBoundTop(4)) y = 3;
+  if (y_pos < getBoundTop(4) && y_pos > getBoundTop(5)) y = 4;
+  if (y_pos < getBoundTop(5) && y_pos > getBoundTop(6)) y = 5;
+  if (y_pos < getBoundTop(6)) y = 6;
 
-    return y;
+  return y;
 };
 
 const OnLadder = (object, floor, offset = 0, upOffset= 0) => {
@@ -225,19 +225,52 @@ function down(y_pos) {
     console.log('currentX ===', currentX, 'currentY', currentY);
     }
 }
-const donkeyKongCharacter = () => {
-    const leftGameScreen = document
-        .querySelectorAll('.bottom-stages')[0]
-        .getBoundingClientRect().left;
-    const character = document.getElementsByClassName('donkey-kong-class')[0];
-    character.style.left = leftGameScreen + 'px';
-    console.log(character.style.left, leftGameScreen);
-};
-export const main = () => {
-    document.addEventListener('keydown', (e) => {
-        let box = document.getElementById('box').getBoundingClientRect();
 
-        let top = parseInt(box.top);
+const donkeyKongCharacter = () => {
+  const leftGameScreen = document
+    .querySelectorAll(".bottom-stages")[0]
+    .getBoundingClientRect().left;
+  const character = document.getElementsByClassName("donkey-kong-class")[0];
+  character.style.left = leftGameScreen + "px";
+  console.log(character.style.left, leftGameScreen);
+};
+
+let initialPos;
+function newBarrel() {
+  //Create the div to hold the barrel
+  const barrel = document.createElement("div");
+  const barrelImg = document.createElement("img");
+  barrelImg.setAttribute("src", "./images/background1.png");
+  barrelImg.setAttribute("class", "barrelImg");
+  barrel.append(barrelImg);
+  barrel.setAttribute("class", "barrel");
+  const bottomStages = document.querySelector(".bottom-stages");
+  const topPlatform = document.getElementById("6");
+  //Get the starting point of the barrel
+  const donkeyKong = document.querySelector(".donkey-kong-class");
+  const bounds = donkeyKong.getBoundingClientRect();
+  barrel.style.left = `${bounds.right}px`;
+  barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
+  bottomStages.insertBefore(barrel, topPlatform);
+  initialPos = barrel.getBoundingClientRect();
+}
+
+function moveBarrel() {
+  //Get the barrel as an element
+  const currBarrel = document.querySelector(".barrel");
+  const thisBarrel = currBarrel.getBoundingClientRect();
+  const XdistMoved = thisBarrel.left - initialPos.left;
+
+  //Move the barrel to the right
+  currBarrel.style.transform = `translate(${XdistMoved + 2}vw, ${0}vh)`;
+  //Move the barrel by 1vh each time
+}
+
+export const main = () => {
+  document.addEventListener("keydown", (e) => {
+    let box = document.getElementById("box").getBoundingClientRect();
+
+    let top = parseInt(box.top);
 
         if (e.key === 'ArrowRight') {
             placeRight(top);
@@ -256,4 +289,5 @@ export const main = () => {
         }
     });
     donkeyKongCharacter();
+    newBarrel();
 };
