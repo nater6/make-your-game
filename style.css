@@ -126,17 +126,17 @@ body {
     height: 8vh;
 }
 
-.donkey-kong-character {
-    height: 56px;
-    width: 79.4444444444px;
+.donkey-kong-character-throw {
+    height: 60px;
+    width: 95px;
     background: url('./images/donkeyKongSpritesheet.png');
-    animation: sprite 1s steps(18) infinite;
+    animation: throw 1.5s steps(30) 1;
 }
-@keyframes sprite {
+@keyframes throw {
     from {
         background-position: 0px;
     }
     to {
-        background-position: -1430px;
+        background-position: -2850px;
     }
 }

@@ -28,12 +28,12 @@ const CurrentLevel = (y_pos) => {
 };
 
 const OnLadder = (object, floor) => {
-    console.log(object.left);
+    // console.log(object.left);
     let x_pos = parseInt(object.left);
 
-    console.log('ladder_1 =', ladder_1);
-    console.log(object);
-    console.log(floor);
+    // console.log('ladder_1 =', ladder_1);
+    // console.log(object);
+    // console.log(floor);
 
     if (floor === 0) {
         return (
@@ -43,7 +43,6 @@ const OnLadder = (object, floor) => {
         );
     }
     if (floor === 1 || floor === 2) {
-
         return (
             (x_pos < ladder_2.left && x_pos > ladder_2.left - ladder_2.width) ||
             (x_pos < ladder_3.left && x_pos > ladder_3.left - ladder_3.width) ||
@@ -72,7 +71,7 @@ const OnLadder = (object, floor) => {
         return x_pos < ladder_7.left && x_pos > ladder_7.left - ladder_7.width;
     }
 };
-
+//Move Left
 function placeLeft() {
     let element = document.getElementById('box');
     element.style.position = 'absolute';
@@ -83,15 +82,11 @@ function placeLeft() {
     );
     currentX += 1;
     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
-    console.log(
-        'StartingX ==',
-        ((startingX - element.getBoundingClientRect().left) /
-            window.innerWidth) *
-            100
-    );
-    console.log('currentX ===', currentX, 'currentY', currentY);
 }
-
+const moveLeft = () => {
+    requestAnimationFrame(placeLeft);
+};
+// Move Right
 function placeRight() {
     let element = document.getElementById('box');
     element.style.position = 'absolute';
@@ -100,24 +95,34 @@ function placeRight() {
             window.innerWidth) *
             100
     );
-    currentX -= 1;
     currentX < 0 ? 0 : (currentX -= 1);
-
     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
-    console.log('currentX ===', currentX, 'currentY', currentY);
 }
-function jump(id) {
-    let element = document.getElementById('box');
-    element.style.transform = `translate(-${currentX}, -${currentY - 5}vh)`;
-    function down() {
-        element.style.transform = `translate(-${currentX}, -${currentY}vh)`;
-    }
-    setTimeout(down, 100);
-}
+const moveRight = () => {
+    requestAnimationFrame(placeRight);
+};
 
-function up(y_pos) {
+function jump() {
     let element = document.getElementById('box');
-    if (OnLadder(element.getBoundingClientRect(), CurrentLevel(y_pos))) {
+    console.log(element.getBoundingClientRect().bottom);
+    element.style.transform = `translate(-${currentX}vw, -${currentY + 5}vh)`;
+    console.log(element.getBoundingClientRect().bottom);
+    function down() {
+        element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+    }
+    const updateDown = () => {
+        requestAnimationFrame(down);
+    };
+    setTimeout(updateDown, 250);
+}
+const updateJump = () => {
+    requestAnimationFrame(jump);
+};
+function up() {
+    let box = document.getElementById('box').getBoundingClientRect();
+    let top = parseInt(box.top);
+    let element = document.getElementById('box');
+    if (OnLadder(element.getBoundingClientRect(), CurrentLevel(top - 10))) {
         element.style.position = 'absolute';
         currentY = Math.round(
             ((startingY - element.getBoundingClientRect().top) /
@@ -127,10 +132,11 @@ function up(y_pos) {
         currentY += 1;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
-    console.log('currentX ===', currentX, 'currentY', currentY);
 }
-
-function down(y_pos) {
+const updateUp = () => {
+    requestAnimationFrame(up);
+};
+function down() {
     let element = document.getElementById('box');
     element.style.position = 'absolute';
     currentY = Math.round(
@@ -140,37 +146,31 @@ function down(y_pos) {
     );
     currentY < 0 ? 0 : (currentY -= 1);
     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
-    console.log('currentX ===', currentX, 'currentY', currentY);
 }
-const donkeyKongCharacter = () => {
-    const leftGameScreen = document
-        .querySelectorAll('.bottom-stages')[0]
-        .getBoundingClientRect().left;
-    const character = document.getElementsByClassName('donkey-kong-class')[0];
-    character.style.left = leftGameScreen + 'px';
-    console.log(character.style.left, leftGameScreen);
+const updateDown = () => {
+    requestAnimationFrame(down);
 };
 export const main = () => {
     document.addEventListener('keydown', (e) => {
-        let box = document.getElementById('box').getBoundingClientRect();
-
-        let top = parseInt(box.top);
-
         if (e.key === 'ArrowRight') {
-            placeRight();
+            console.log('right');
+            moveRight();
         }
         if (e.key === 'ArrowLeft') {
-            placeLeft();
+            console.log('left');
+            moveLeft();
         }
         if (e.key === 'ArrowUp') {
-            up(top - 10);
+            console.log('up');
+            updateUp();
         }
         if (e.key === 'ArrowDown') {
-            down(top + 10);
+            console.log('down');
+            updateDown();
         }
         if (e.key === ' ') {
-            jump();
+            console.log('jump');
+            updateJump();
         }
     });
-    donkeyKongCharacter();
 };
