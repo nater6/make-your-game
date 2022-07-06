@@ -289,6 +289,11 @@ function down() {
 const updateDown = () => {
     requestAnimationFrame(down);
 };
+const keys = {
+    jump: {
+        pressed: false,
+    },
+};
 
 let initialPos;
 function newBarrel() {
@@ -322,7 +327,7 @@ function moveBarrel() {
 }
 
 export const main = () => {
-    document.addEventListener('keydown', (e) => {
+    addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
             console.log('right');
             moveRight();
@@ -339,10 +344,18 @@ export const main = () => {
             console.log('down');
             updateDown();
         }
-        if (e.key === ' ') {
+        if (e.key === ' ' && !keys.jump.pressed) {
             console.log('jump');
             updateJump();
+            keys.jump.pressed = true;
         }
+        console.log(keys.jump.pressed);
+    });
+    addEventListener('keyup', ({ key }) => {
+        if (key === ' ') {
+            keys.jump.pressed = false;
+        }
+        console.log(keys.jump.pressed);
     });
     newBarrel();
 };
