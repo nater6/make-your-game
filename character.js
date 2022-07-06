@@ -84,8 +84,7 @@ const OnLadder = (object, floor, offset = 0, upOffset= 0) => {
     if (floor === 2 || floor === 3) {
        
         if (
-            (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) ||
-            (x_pos < ladder_5.left && x_pos > ladder_5.left - ladder_5.width)
+            (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width)
         
         ){
             if(x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width && ladder_4.y - offset > object.bottom){
@@ -236,8 +235,9 @@ const donkeyKongCharacter = () => {
 };
 
 let initialPos;
-function newBarrel() {
-  //Create the div to hold the barrel
+
+function newBarrel(timestamp ) {
+  //Create the div to hold the barrel and the image for the barrel
   const barrel = document.createElement("div");
   const barrelImg = document.createElement("img");
   barrelImg.setAttribute("src", "./images/background1.png");
@@ -246,25 +246,35 @@ function newBarrel() {
   barrel.setAttribute("class", "barrel");
   const bottomStages = document.querySelector(".bottom-stages");
   const topPlatform = document.getElementById("6");
-  //Get the starting point of the barrel
+  //Put the barrel next to donkey kong
   const donkeyKong = document.querySelector(".donkey-kong-class");
   const bounds = donkeyKong.getBoundingClientRect();
   barrel.style.left = `${bounds.right}px`;
   barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
   bottomStages.insertBefore(barrel, topPlatform);
+  //Get the initial position of each barrel
   initialPos = barrel.getBoundingClientRect();
 }
 
 function moveBarrel() {
+  let endReached;
   //Get the barrel as an element
-  const currBarrel = document.querySelector(".barrel");
-  const thisBarrel = currBarrel.getBoundingClientRect();
-  const XdistMoved = thisBarrel.left - initialPos.left;
+  const currBarrel = document.querySelectorAll(".barrel");
+  currBarrel.forEach((indBarrel) => {
+    const thisBarrel = indBarrel.getBoundingClientRect();
+    const XdistMoved =
+      ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
+    console.log("X Direction Moved -> ", XdistMoved);
 
-  //Move the barrel to the right
-  currBarrel.style.transform = `translate(${XdistMoved + 2}vw, ${0}vh)`;
+    //Move the barrel to the right
+    indBarrel.style.transform = `translate(${XdistMoved + 0.1}vw, ${0}vh)`;
+    console.log("RAF");
+  });
+
+  if (endReached !== true) window.requestAnimationFrame(moveBarrel);
   //Move the barrel by 1vh each time
 }
+
 
 export const main = () => {
   document.addEventListener("keydown", (e) => {
@@ -290,4 +300,5 @@ export const main = () => {
     });
     donkeyKongCharacter();
     newBarrel();
+    window.requestAnimationFrame(moveBarrel)
 };
