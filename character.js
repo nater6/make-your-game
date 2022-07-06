@@ -1,4 +1,4 @@
-et startingX = document.querySelector('#box').getBoundingClientRect().left;
+let startingX = document.querySelector('#box').getBoundingClientRect().left;
 let startingY = document.querySelector('#box').getBoundingClientRect().top;
 let currentX = 0;
 let currentY = 0;
