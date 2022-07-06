@@ -1,85 +1,85 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  border: 0;
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  justify-content: center;
-  grid-template-columns: repeat(3, 33%);
-  overflow: hidden;
+    margin: 0;
+    border: 0;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(3, 33%);
+    overflow: hidden;
 }
 
 .gameScreen {
-  display: grid;
-  grid-template-rows: 15% 85%;
-  background-color: black;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+    display: grid;
+    grid-template-rows: 15% 85%;
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 .top-stages {
-  display: flex;
-  flex-direction: column;
-  /* align-items: flex-end; */
-  /* justify-content: center; */
-  justify-content: flex-end;
+    display: flex;
+    flex-direction: column;
+    /* align-items: flex-end; */
+    /* justify-content: center; */
+    justify-content: flex-end;
 }
 
 .bottom-stages {
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  justify-content: space-evenly;
-  height: 100%;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: space-evenly;
+    height: 100%;
+    width: 100%;
 }
 
 .stage {
-  height: 2%;
-  width: 100%;
-  display: flex;
-  background-image: url("./images/crane.png");
-  background-position: center;
-  background-size: 50% 130%;
-  z-index: 10;
-  background-color: black;
+    height: 2%;
+    width: 100%;
+    display: flex;
+    background-image: url('./images/crane.png');
+    background-position: center;
+    background-size: 50% 130%;
+    z-index: 10;
+    background-color: black;
 }
 
 .upperstage {
-  height: 20%;
-  bottom: 0%;
+    height: 20%;
+    bottom: 0%;
 }
 
 .rotate1 {
-  /* transform: rotate(1.5deg); */
+    /* transform: rotate(1.5deg); */
 }
 
 .rotate2 {
-  /* transform: rotate(-1.5deg); */
+    /* transform: rotate(-1.5deg); */
 }
 
 .stage:last-child {
-  width: 100%;
+    width: 100%;
 }
 
 .stageblocks {
-  /* background-color: lightblue; */
-  width: 7.5%;
-  height: 100%;
-  margin: 0;
+    /* background-color: lightblue; */
+    width: 7.5%;
+    height: 100%;
+    margin: 0;
 }
 
 .black {
-  background-color: black;
+    background-color: black;
 }
 
 .villain {
-  height: 5%;
+    height: 5%;
 }
 
 /* .goComputer img {
@@ -93,63 +93,62 @@ body {
 /* } */
 
 .ladder {
-  /* background-color: white; */
-  background-image: url("./images/ladder.png");
-  /* background-color: black; */
-  background-position: center;
-  background-size: cover;
-  height: 600%;
-  width: 60%;
-  z-index: 1000;
-  margin-top: 15%;
+    /* background-color: white; */
+    background-image: url('./images/ladder.png');
+    /* background-color: black; */
+    background-position: center;
+    background-size: cover;
+    height: 600%;
+    width: 60%;
+    z-index: 1000;
+    margin-top: 15%;
 }
 
 .upperlad {
-  height: 400%;
+    height: 400%;
 }
 
 #box {
-  height: 7%;
-  width: 3%;
-  position: absolute;
-  bottom: 10%;
-  z-index: 100;
+    height: 7%;
+    width: 3%;
+    position: absolute;
+    bottom: 10%;
+    z-index: 100;
 }
 
 .donkey-kong-class {
-  position: absolute;
-  bottom: 75.4%;
-  z-index: 100;
+    position: absolute;
+    bottom: 75.4%;
+    z-index: 100;
 }
 
 .donkeyKong-class img {
-  height: 8vh;
+    height: 8vh;
 }
 
-.donkey-kong-character {
-  height: 56px;
-  width: 79.4444444444px;
-  background: url("./images/donkeyKongSpritesheet.png");
-  animation: sprite 1s steps(18) infinite;
+.donkey-kong-character-throw {
+    height: 60px;
+    width: 95px;
+    background: url('./images/donkeyKongSpritesheet.png');
+    animation: throw 1.5s steps(30) 1;
 }
-@keyframes sprite {
-  from {
-    background-position: 0px;
-  }
-  to {
-    background-position: -1430px;
-  }
+@keyframes throw {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: -2850px;
+    }
 }
 
 .barrel {
-  height: 3%;
-  width: 1.5%;
-  /* background: url("./images/background1.png"); */
-  position: absolute;
-  z-index: 1000;
-
+    height: 3%;
+    width: 1.5%;
+    /* background: url("./images/background1.png"); */
+    position: absolute;
+    z-index: 1000;
 }
-.barrelImg{
+.barrelImg {
     width: 100%;
     height: 100%;
 }
