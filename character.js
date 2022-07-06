@@ -38,11 +38,18 @@ const OnLadder = (object, floor, offset = 0, upOffset= 0) => {
     console.log(floor);
 
     if (floor === 0) {
-        return (
+        if (
             x_pos < ladder_1.left &&
             x_pos > ladder_1.left - ladder_1.width &&
             ladder_1.y < object.bottom
-        );
+        ) {
+            if(floor === 0 ) {
+                if(x_pos < ladder_1.left && x_pos > ladder_1.left - ladder_1.width && ladder_1.bottom  < (object.bottom  - upOffset)){
+                    return false
+                   }
+               }
+        return true
+        }
     }
     if (floor === 1 || floor === 2) {
 
@@ -84,8 +91,8 @@ const OnLadder = (object, floor, offset = 0, upOffset= 0) => {
     if (floor === 2 || floor === 3) {
        
         if (
-            (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) ||
-            (x_pos < ladder_5.left && x_pos > ladder_5.left - ladder_5.width)
+            (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) 
+           
         
         ){
             if(x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width && ladder_4.y - offset > object.bottom){
