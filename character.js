@@ -84,14 +84,17 @@ const OnLadder = (object, floor, offset = 0, upOffset= 0) => {
             return false
            }
        }
+
+       
+
             return true
         }
     }
 
     if (floor === 2 || floor === 3) {
-       
         if (
-            (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) 
+            (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) ||
+            (x_pos < ladder_5.left && x_pos > ladder_5.left - ladder_5.width)
            
         
         ){
@@ -104,12 +107,22 @@ const OnLadder = (object, floor, offset = 0, upOffset= 0) => {
                     return false
                    }
                }
+               if(floor === 2){
+                if(x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) {
+                    return false
+                }
+               }
+               if(floor === 2){
+                if(x_pos < ladder_5.left && x_pos > ladder_5.left - ladder_5.width) {
+                    return false
+                }
+               }
                
             return true
         }
     }
     if (floor === 3 || floor === 4) {
-        
+    
         if (
             (x_pos < ladder_5.left && x_pos > ladder_5.left - ladder_5.width) ||
             (x_pos < ladder_6.left && x_pos > ladder_6.left - ladder_6.width)
@@ -128,7 +141,7 @@ const OnLadder = (object, floor, offset = 0, upOffset= 0) => {
         }
     }
     if (floor === 4 || floor === 5) {
-    
+     
         if (
             (x_pos < ladder_6.left && x_pos > ladder_6.left - ladder_6.width) ||
             (x_pos < ladder_7.left && x_pos > ladder_7.left - ladder_7.width)
@@ -141,12 +154,18 @@ const OnLadder = (object, floor, offset = 0, upOffset= 0) => {
                     return false
                    }
                }
+
+               if(floor === 4 ) {
+                if(x_pos < ladder_7.left && x_pos > ladder_7.left - ladder_7.width ){
+                    return false
+                   }
+               }
                return true
         }
     }
     if (floor === 5 || floor === 6) {
         if( x_pos < ladder_7.left && x_pos > ladder_7.left - ladder_7.width){
-            if(x_pos < ladder_7.left && x_pos > ladder_7.left - ladder_7.width && ladder_7.y + ( - offset ) > object.bottom - 2){
+            if(x_pos < ladder_7.left && x_pos > ladder_7.left - ladder_7.width && ladder_7.y + ( - offset ) > object.bottom - 3){
                 return false
                }
 
