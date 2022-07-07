@@ -23,7 +23,6 @@ const CurrentLevel = (y_pos) => {
     if (y_pos < getBoundTop(4) && y_pos > getBoundTop(5)) y = 4;
     if (y_pos < getBoundTop(5) && y_pos > getBoundTop(6)) y = 5;
     if (y_pos < getBoundTop(6)) y = 6;
-
     return y;
 };
 
@@ -326,8 +325,9 @@ const keys = {
 };
 
 let initialPos;
+
 function newBarrel() {
-    //Create the div to hold the barrel
+    //Create the div to hold the barrel and the image for the barrel
     const barrel = document.createElement('div');
     const barrelImg = document.createElement('img');
     barrelImg.setAttribute('src', './images/background1.png');
@@ -336,23 +336,40 @@ function newBarrel() {
     barrel.setAttribute('class', 'barrel');
     const bottomStages = document.querySelector('.bottom-stages');
     const topPlatform = document.getElementById('6');
-    //Get the starting point of the barrel
+    //Put the barrel next to donkey kong
     const donkeyKong = document.querySelector('.donkey-kong-class');
     const bounds = donkeyKong.getBoundingClientRect();
     barrel.style.left = `${bounds.right}px`;
     barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
     bottomStages.insertBefore(barrel, topPlatform);
+    console.log('object');
+    //Get the initial position of each barrel
     initialPos = barrel.getBoundingClientRect();
 }
 
+let time;
 function moveBarrel() {
-    //Get the barrel as an element
-    const currBarrel = document.querySelector('.barrel');
-    const thisBarrel = currBarrel.getBoundingClientRect();
-    const XdistMoved = thisBarrel.left - initialPos.left;
+    // if (time === undefined) time = new Date.now();
+    // if (time - Date.now() > 3000) {
+    //     newBarrel();
+    //     time = new Date.now();
+    // }
 
-    //Move the barrel to the right
-    currBarrel.style.transform = `translate(${XdistMoved + 2}vw, ${0}vh)`;
+    let endReached;
+    //Get the barrel as an element
+    const currBarrel = document.querySelectorAll('.barrel');
+    currBarrel.forEach((indBarrel) => {
+        const thisBarrel = indBarrel.getBoundingClientRect();
+        const XdistMoved =
+            ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
+        // console.log('X Direction Moved -> ', XdistMoved);
+
+        //Move the barrel to the right
+        indBarrel.style.transform = `translate(${XdistMoved + 0.1}vw, ${0}vh)`;
+        // console.log('RAF');
+    });
+
+    if (endReached !== true) window.requestAnimationFrame(moveBarrel);
     //Move the barrel by 1vh each time
 }
 
@@ -387,5 +404,8 @@ export const main = () => {
         }
         console.log(keys.jump.pressed);
     });
+    // setInterval(newBarrel, 2 );
     newBarrel();
+    requestAnimationFrame(moveBarrel);
+    // requestAnimationFrame(newBarrel);
 };

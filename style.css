@@ -130,7 +130,7 @@ body {
     height: 60px;
     width: 95px;
     background: url('./images/donkeyKongSpritesheet.png');
-    animation: throw 1.5s steps(30) 1;
+    animation: throw 1.5s steps(30) infinite;
 }
 @keyframes throw {
     from {
