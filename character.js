@@ -378,8 +378,6 @@ function moveBarrel() {
         const thisBarrel = indBarrel.getBoundingClientRect();
         const XdistMoved =
             ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
-
-        console.log(CurrentLevel(thisBarrel.top + 10));
         //Move the barrel to the right
         indBarrel.style.transform = `translate(${XdistMoved + 0.1}vw, ${0}vh)`;
     });
