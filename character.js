@@ -13,8 +13,10 @@ let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
 
 let element = document.getElementById('box');
 
+const gameScreen = document.querySelector('.gameScreen');
+let y = 0;
+
 const CurrentLevel = (y_pos) => {
-    let y = 0;
     const getBoundTop = (ind) =>
         document.getElementById(ind).getBoundingClientRect().top;
     //If cline y is between 0 top and 1 top y = 0
@@ -103,11 +105,9 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                     return false;
                 }
             }
-
             return true;
         }
     }
-
     if (floor === 2 || floor === 3) {
         if (
             (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) ||
@@ -120,7 +120,6 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
             ) {
                 return false;
             }
-
             if (floor === 3) {
                 if (
                     x_pos < ladder_5.left &&
@@ -232,9 +231,9 @@ function placeLeft() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const moveLeft = () => {
-    requestAnimationFrame(placeLeft);
-};
+// const moveLeft = () => {
+//     requestAnimationFrame(placeLeft);
+// };
 // Move Right
 function placeRight() {
     let top = parseInt(element.getBoundingClientRect().top);
@@ -249,9 +248,9 @@ function placeRight() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const moveRight = () => {
-    requestAnimationFrame(placeRight);
-};
+// const moveRight = () => {
+//     requestAnimationFrame(placeRight);
+// };
 
 function jump() {
     let top = parseInt(element.getBoundingClientRect().top);
@@ -262,15 +261,15 @@ function jump() {
         function down() {
             element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
         }
-        const updateDown = () => {
-            requestAnimationFrame(down);
-        };
-        setTimeout(updateDown, 250);
+        // const updateDown = () => {
+        //     requestAnimationFrame(down);
+        // };
+        setTimeout(down, 250);
     }
 }
-const updateJump = () => {
-    requestAnimationFrame(jump);
-};
+// const updateJump = () => {
+//     requestAnimationFrame(jump);
+// };
 function up() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (
@@ -286,9 +285,9 @@ function up() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const updateUp = () => {
-    requestAnimationFrame(up);
-};
+// const updateUp = () => {
+//     requestAnimationFrame(up);
+// };
 
 function down() {
     let top = parseInt(element.getBoundingClientRect().top);
@@ -303,14 +302,9 @@ function down() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const updateDown = () => {
-    requestAnimationFrame(down);
-};
-const keys = {
-    jump: {
-        pressed: false,
-    },
-};
+// const updateDown = () => {
+//     requestAnimationFrame(down);
+// };
 
 let initialPos;
 
@@ -356,23 +350,60 @@ function moveBarrel() {
     if (endReached !== true) window.requestAnimationFrame(moveBarrel);
     //Move the barrel by 1vh each time
 }
-
+const keys = {
+    jump: {
+        pressed: false,
+    },
+    right: {
+        pressed: false,
+    },
+    left: {
+        pressed: false,
+    },
+    up: {
+        pressed: false,
+    },
+    down: {
+        pressed: false,
+    },
+};
+const gameLoop = () => {
+    const leftBound =
+        element.getBoundingClientRect().left -
+        gameScreen.getBoundingClientRect().left;
+    if (keys.jump.pressed) {
+        jump();
+    }
+    if (keys.right.pressed) {
+        placeRight();
+    }
+    if (keys.left.pressed && leftBound > 0.5) {
+        placeLeft();
+    }
+    if (keys.up.pressed) {
+        up();
+    }
+    if (keys.down.pressed) {
+        down();
+    }
+    // newBarrel();
+    requestAnimationFrame(gameLoop);
+};
 export const main = () => {
     addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
-            moveRight();
+            keys.right.pressed = true;
         }
         if (e.key === 'ArrowLeft') {
-            moveLeft();
+            keys.left.pressed = true;
         }
         if (e.key === 'ArrowUp') {
-            updateUp();
+            keys.up.pressed = true;
         }
         if (e.key === 'ArrowDown') {
-            updateDown();
+            keys.down.pressed = true;
         }
-        if (e.key === ' ' && !keys.jump.pressed) {
-            updateJump();
+        if (e.key === ' ') {
             keys.jump.pressed = true;
         }
     });
@@ -380,9 +411,22 @@ export const main = () => {
         if (key === ' ') {
             keys.jump.pressed = false;
         }
+        if (key === 'ArrowRight') {
+            keys.right.pressed = false;
+        }
+        if (key === 'ArrowLeft') {
+            keys.left.pressed = false;
+        }
+        if (key === 'ArrowUp') {
+            keys.up.pressed = false;
+        }
+        if (key === 'ArrowDown') {
+            keys.down.pressed = false;
+        }
     });
-    // setInterval(newBarrel, 2 );
-    newBarrel();
-    requestAnimationFrame(moveBarrel);
+    // setInterval(newBarrel, 2);
+    gameLoop();
+
+    // requestAnimationFrame(moveBarrel);
     // requestAnimationFrame(newBarrel);
 };
