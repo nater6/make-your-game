@@ -13,10 +13,11 @@ let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
 
 let element = document.getElementById('box');
 
+const getBoundTop = (ind) =>
+    document.getElementById(ind).getBoundingClientRect().top;
+
 const CurrentLevel = (y_pos) => {
     let y = 0;
-    const getBoundTop = (ind) =>
-        document.getElementById(ind).getBoundingClientRect().top;
     //If cline y is between 0 top and 1 top y = 0
     if (y_pos < getBoundTop(0) && y_pos > getBoundTop(1)) y = 0;
     if (y_pos < getBoundTop(1) && y_pos > getBoundTop(2)) y = 1;
@@ -336,27 +337,27 @@ function newBarrel() {
     initialPos = barrel.getBoundingClientRect();
 }
 
-function barrelDrop(divCenter) {
+//Get the distance between two stages in pixels
+let dBetweenStages = getBoundTop(0) - getBoundTop(1)
+function barrelDrop(divCenter, divBottom) {
     //Find all the black divs and get the location of the center
     const blackDivs = document.querySelectorAll("black")
     //BlackDivLocations will hold the location of each div on the page
+    let result = false
     let blackDivLocations = [];
     blackDivs.forEach(div => {
         const blackDivMiddle = (div.getBoundingClientRect().x + div.getBoundingClientRect().y / 2)
-        blackDivLocations.push(blackDivMiddle)
+        const blackDivTop = div.getBoundingClientRect().top
+        if (divCenter > blackDivMiddle && divBottom > blackDivBottom ) {
+            result = true
+        }
     })
-
     //Check if the character is past the centre of the black div
+    
 }
 
 let time;
 function moveBarrel() {
-    // if (time === undefined) time = new Date.now();
-    // if (time - Date.now() > 3000) {
-    //     newBarrel();
-    //     time = new Date.now();
-    // }
-
     let endReached;
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
@@ -396,6 +397,7 @@ export const main = () => {
         }
     });
     // setInterval(newBarrel, 2 );
+    console.log('DISTANCE BETWEEN STAGES', dBetweenStages);
     newBarrel();
     requestAnimationFrame(moveBarrel);
     // requestAnimationFrame(newBarrel);
