@@ -144,7 +144,6 @@ body {
 .barrel {
     height: 3%;
     width: 1.5%;
-    /* background: url("./images/background1.png"); */
     position: absolute;
     z-index: 1000;
 }

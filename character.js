@@ -329,11 +329,13 @@ let initialPos;
 function newBarrel() {
     //Create the div to hold the barrel and the image for the barrel
     const barrel = document.createElement('div');
+    //Create an img elem to go inside
     const barrelImg = document.createElement('img');
     barrelImg.setAttribute('src', './images/background1.png');
     barrelImg.setAttribute('class', 'barrelImg');
     barrel.append(barrelImg);
     barrel.setAttribute('class', 'barrel');
+    //Get the HTMLelement of the top stage crane
     const bottomStages = document.querySelector('.bottom-stages');
     const topPlatform = document.getElementById('6');
     //Put the barrel next to donkey kong
@@ -345,6 +347,19 @@ function newBarrel() {
     console.log('object');
     //Get the initial position of each barrel
     initialPos = barrel.getBoundingClientRect();
+}
+
+function barrelDrop(divCenter) {
+    //Find all the black divs and get the location of the center
+    const blackDivs = document.querySelectorAll("black")
+    //BlackDivLocations will hold the location of each div on the page
+    let blackDivLocations = [];
+    blackDivs.forEach(div => {
+        const blackDivMiddle = (div.getBoundingClientRect().x + div.getBoundingClientRect().y / 2)
+        blackDivLocations.push(blackDivMiddle)
+    })
+
+    //Check if the character is past the centre of the black div
 }
 
 let time;
@@ -362,15 +377,13 @@ function moveBarrel() {
         const thisBarrel = indBarrel.getBoundingClientRect();
         const XdistMoved =
             ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
-        // console.log('X Direction Moved -> ', XdistMoved);
 
+        console.log(CurrentLevel(thisBarrel.top + 10));
         //Move the barrel to the right
         indBarrel.style.transform = `translate(${XdistMoved + 0.1}vw, ${0}vh)`;
-        // console.log('RAF');
     });
 
     if (endReached !== true) window.requestAnimationFrame(moveBarrel);
-    //Move the barrel by 1vh each time
 }
 
 export const main = () => {
