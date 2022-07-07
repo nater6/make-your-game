@@ -152,7 +152,6 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                     return false;
                 }
             }
-
             return true;
         }
     }
@@ -168,7 +167,6 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
             ) {
                 return false;
             }
-
             if (floor === 4) {
                 if (
                     x_pos < ladder_6.left &&
@@ -202,7 +200,6 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                     return false;
                 }
             }
-
             if (floor === 4) {
                 if (
                     x_pos < ladder_7.left &&
@@ -223,7 +220,6 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
             ) {
                 return false;
             }
-
             return true;
         }
     }
@@ -267,16 +263,21 @@ const moveRight = () => {
 
 function jump() {
     let element = document.getElementById('box');
-    console.log(element.getBoundingClientRect().bottom);
-    element.style.transform = `translate(-${currentX}vw, -${currentY + 5}vh)`;
-    console.log(element.getBoundingClientRect().bottom);
-    function down() {
-        element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+    let top = parseInt(element.getBoundingClientRect().top);
+    if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
+        // console.log(element.getBoundingClientRect().bottom);
+        element.style.transform = `translate(-${currentX}vw, -${
+            currentY + 5
+        }vh)`;
+        // console.log(element.getBoundingClientRect().bottom);
+        function down() {
+            element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+        }
+        const updateDown = () => {
+            requestAnimationFrame(down);
+        };
+        setTimeout(updateDown, 250);
     }
-    const updateDown = () => {
-        requestAnimationFrame(down);
-    };
-    setTimeout(updateDown, 250);
 }
 const updateJump = () => {
     requestAnimationFrame(jump);
