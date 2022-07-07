@@ -11,6 +11,8 @@ let ladder_5 = document.getElementById('ladder_5').getBoundingClientRect();
 let ladder_6 = document.getElementById('ladder_6').getBoundingClientRect();
 let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
 
+let element = document.getElementById('box');
+
 const CurrentLevel = (y_pos) => {
     let y = 0;
     const getBoundTop = (ind) =>
@@ -27,15 +29,7 @@ const CurrentLevel = (y_pos) => {
 };
 
 const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
-    console.log(object.left);
     let x_pos = parseInt(object.left);
-
-    console.log('ladder_4 =', ladder_4);
-    console.log('ladder_7 =', ladder_7);
-    console.log(object);
-    console.log('object.bottom', object.bottom - 7);
-    console.log(floor);
-
     if (floor === 0) {
         if (
             x_pos < ladder_1.left &&
@@ -226,7 +220,6 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
 };
 //Move Left
 function placeLeft() {
-    let element = document.getElementById('box');
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
         element.style.position = 'absolute';
@@ -244,7 +237,6 @@ const moveLeft = () => {
 };
 // Move Right
 function placeRight() {
-    let element = document.getElementById('box');
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
         element.style.position = 'absolute';
@@ -262,14 +254,11 @@ const moveRight = () => {
 };
 
 function jump() {
-    let element = document.getElementById('box');
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
-        // console.log(element.getBoundingClientRect().bottom);
         element.style.transform = `translate(-${currentX}vw, -${
             currentY + 5
         }vh)`;
-        // console.log(element.getBoundingClientRect().bottom);
         function down() {
             element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
         }
@@ -283,7 +272,6 @@ const updateJump = () => {
     requestAnimationFrame(jump);
 };
 function up() {
-    let element = document.getElementById('box');
     let top = parseInt(element.getBoundingClientRect().top);
     if (
         OnLadder(element.getBoundingClientRect(), CurrentLevel(top - 10), 0, 10)
@@ -297,13 +285,12 @@ function up() {
         currentY += 1;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
-    // console.log('currentX ===', currentX, 'currentY', currentY);
 }
 const updateUp = () => {
     requestAnimationFrame(up);
 };
+
 function down() {
-    let element = document.getElementById('box');
     let top = parseInt(element.getBoundingClientRect().top);
     if (OnLadder(element.getBoundingClientRect(), CurrentLevel(top + 10), 10)) {
         element.style.position = 'absolute';
@@ -345,7 +332,6 @@ function newBarrel() {
     barrel.style.left = `${bounds.right}px`;
     barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
     bottomStages.insertBefore(barrel, topPlatform);
-    console.log('object');
     //Get the initial position of each barrel
     initialPos = barrel.getBoundingClientRect();
 }
@@ -388,33 +374,26 @@ function moveBarrel() {
 export const main = () => {
     addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
-            console.log('right');
             moveRight();
         }
         if (e.key === 'ArrowLeft') {
-            console.log('left');
             moveLeft();
         }
         if (e.key === 'ArrowUp') {
-            console.log('up');
             updateUp();
         }
         if (e.key === 'ArrowDown') {
-            console.log('down');
             updateDown();
         }
         if (e.key === ' ' && !keys.jump.pressed) {
-            console.log('jump');
             updateJump();
             keys.jump.pressed = true;
         }
-        console.log(keys.jump.pressed);
     });
     addEventListener('keyup', ({ key }) => {
         if (key === ' ') {
             keys.jump.pressed = false;
         }
-        console.log(keys.jump.pressed);
     });
     // setInterval(newBarrel, 2 );
     newBarrel();
