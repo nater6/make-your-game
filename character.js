@@ -110,12 +110,16 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                     return false;
                 }
             }
+
             return true;
         }
     }
 
     if (floor === 2 || floor === 3) {
-        if (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) {
+        if (
+            (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) ||
+            (x_pos < ladder_5.left && x_pos > ladder_5.left - ladder_5.width)
+        ) {
             if (
                 x_pos < ladder_4.left &&
                 x_pos > ladder_4.left - ladder_4.width &&
@@ -129,6 +133,22 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                     x_pos < ladder_5.left &&
                     x_pos > ladder_5.left - ladder_5.width &&
                     ladder_5.bottom < object.bottom - upOffset
+                ) {
+                    return false;
+                }
+            }
+            if (floor === 2) {
+                if (
+                    x_pos < ladder_4.left &&
+                    x_pos > ladder_4.left - ladder_4.width
+                ) {
+                    return false;
+                }
+            }
+            if (floor === 2) {
+                if (
+                    x_pos < ladder_5.left &&
+                    x_pos > ladder_5.left - ladder_5.width
                 ) {
                     return false;
                 }
@@ -183,6 +203,15 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                     return false;
                 }
             }
+
+            if (floor === 4) {
+                if (
+                    x_pos < ladder_7.left &&
+                    x_pos > ladder_7.left - ladder_7.width
+                ) {
+                    return false;
+                }
+            }
             return true;
         }
     }
@@ -191,7 +220,7 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
             if (
                 x_pos < ladder_7.left &&
                 x_pos > ladder_7.left - ladder_7.width &&
-                ladder_7.y + -offset > object.bottom - 2
+                ladder_7.y + -offset > object.bottom - 3
             ) {
                 return false;
             }
@@ -200,8 +229,8 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
         }
     }
 };
-//Move Left
-function placeLeft() {
+
+function placeLeft(y_pos) {
     let element = document.getElementById('box');
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
@@ -215,11 +244,8 @@ function placeLeft() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const moveLeft = () => {
-    requestAnimationFrame(placeLeft);
-};
-// Move Right
-function placeRight() {
+
+function placeRight(y_pos) {
     let element = document.getElementById('box');
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
@@ -233,22 +259,13 @@ function placeRight() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const moveRight = () => {
-    requestAnimationFrame(placeRight);
-};
-
 function jump() {
     let element = document.getElementById('box');
-    console.log(element.getBoundingClientRect().bottom);
     element.style.transform = `translate(-${currentX}vw, -${currentY + 5}vh)`;
-    console.log(element.getBoundingClientRect().bottom);
     function down() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
-    const updateDown = () => {
-        requestAnimationFrame(down);
-    };
-    setTimeout(updateDown, 250);
+    setTimeout(down, 100);
 }
 const updateJump = () => {
     requestAnimationFrame(jump);
@@ -268,11 +285,10 @@ function up() {
         currentY += 1;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
+    console.log('currentX ===', currentX, 'currentY', currentY);
 }
-const updateUp = () => {
-    requestAnimationFrame(up);
-};
-function down() {
+
+function down(y_pos) {
     let element = document.getElementById('box');
     let top = parseInt(element.getBoundingClientRect().top);
     if (OnLadder(element.getBoundingClientRect(), CurrentLevel(top + 10), 10)) {
@@ -286,8 +302,14 @@ function down() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const updateDown = () => {
-    requestAnimationFrame(down);
+
+const donkeyKongCharacter = () => {
+    const leftGameScreen = document
+        .querySelectorAll('.bottom-stages')[0]
+        .getBoundingClientRect().left;
+    const character = document.getElementsByClassName('donkey-kong-class')[0];
+    character.style.left = leftGameScreen + 'px';
+    console.log(character.style.left, leftGameScreen);
 };
 const keys = {
     jump: {
@@ -329,20 +351,16 @@ function moveBarrel() {
 export const main = () => {
     addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
-            console.log('right');
-            moveRight();
+            placeRight(top);
         }
         if (e.key === 'ArrowLeft') {
-            console.log('left');
-            moveLeft();
+            placeLeft(top);
         }
         if (e.key === 'ArrowUp') {
-            console.log('up');
-            updateUp();
+            up(top - 10);
         }
         if (e.key === 'ArrowDown') {
-            console.log('down');
-            updateDown();
+            down(top + 10);
         }
         if (e.key === ' ' && !keys.jump.pressed) {
             console.log('jump');
