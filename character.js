@@ -328,6 +328,9 @@ function down() {
 let initialPos;
 
 
+let dBetweenStages = getBoundTop(0) - getBoundTop(1)
+const donkeyKong = document.querySelector('.donkey-kong-class');
+const bounds = donkeyKong.getBoundingClientRect();
 function newBarrel() {
     //Create the div to hold the barrel and the image for the barrel
     const barrel = document.createElement('div');
@@ -341,53 +344,112 @@ function newBarrel() {
     const bottomStages = document.querySelector('.bottom-stages');
     const topPlatform = document.getElementById('6');
     //Put the barrel next to donkey kong
-    const donkeyKong = document.querySelector('.donkey-kong-class');
-    const bounds = donkeyKong.getBoundingClientRect();
-    barrel.style.left = `${bounds.right}px`;
-    barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
+    
+    barrel.style.left = `${bounds.right- (bounds.right-bounds.left)}px`;
+    barrel.style.top = `${(bounds.bottom + dBetweenStages) - window.innerHeight * 0.0325}px`;
     bottomStages.insertBefore(barrel, topPlatform);
     //Get the initial position of each barrel
     initialPos = barrel.getBoundingClientRect();
 }
 
 //Get the distance between two stages in pixels
-let dBetweenStages = getBoundTop(0) - getBoundTop(1)
 function barrelDrop(divCenter, divTop) {
     //1) Get each barrel with the barrel class
     const blackDivs = document.querySelectorAll('black');
     //2) Go through the list of each black div
+    let result = false
     blackDivs.forEach((div) => {
         //3) If the barrel is on the same level as the div check if the center of the barrel is past the centre of the div if so drop down to next level
-        c
+        //Calculate the centre point of the current black div
+        let blackDivCenter = (div.right + div.left) / 2
+        console.log('BlackDivCenter', blackDivCenter);
+        if (CurrentLevel(div.top) === CurrentLevel(divTop)) {
+            console.log('blaclDiv location===', blackDivCenter);
+            console.log('Barrel Center===', divCenter);
+            result = true
+        }
     });
+    return result
 }
 
-
 let newB = 0
-function moveBarrel(timestamp) {
-    console.log(timestamp);
+function moveBarrel() {
+    
     newB++
-    if (newB === 240) {
+    if (newB === 500) {
         newBarrel()
         newB = 0
     }
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
+    
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
-        console.log(CurrentLevel(thisBarrel.top));
+        // console.log(CurrentLevel(thisBarrel.top));
         const XdistMoved =
             ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
+        const tbCenter = (thisBarrel.right + thisBarrel.left) /2
         //Move the barrel 
+        // console.log('tbCenter', tbCenter, 'Barrel Top', thisBarrel.top);
+        // let run = barrelDrop(tbCenter, thisBarrel.top);
+        // if (barrelDrop(tbCenter, thisBarrel.top)) {
+        //     let yMove = thisBarrel.top + dBetweenStages;
+        //     indBarrel.style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
+        // }
         if (
             CurrentLevel(thisBarrel.top) === 6 ||
             CurrentLevel(thisBarrel.top) === 4 ||
             CurrentLevel(thisBarrel.top) === 2 ||
             CurrentLevel(thisBarrel.top) === 0
         ) {
+            console.log('in HEre');
+            // console.log('BLACKDIV ====', barrelDrop(tbCenter, thisBarrel.top));
+            // console.log('BarrelLevel', CurrentLevel(thisBarrel.top));
+            let yMove;
+
+            switch (CurrentLevel(thisBarrel.top)) {
+                case 6:
+                    yMove = 0;
+                    break;
+                case 4:
+                    yMove = -dBetweenStages * 2;
+                    break;
+                case 2:
+                    yMove = -dBetweenStages * 4;
+                    break;
+                case 0:
+                    yMove = -dBetweenStages * 6;
+                    break;
+            }
+            // console.log('YMOVE=====', yMove);
+
             indBarrel.style.transform = `translate(${
                 XdistMoved + 0.1
-            }vw, ${0}vh)`;
+            }vw, ${yMove}vh)`;
+        }
+        if (
+            CurrentLevel(thisBarrel.top) === 5 ||
+            CurrentLevel(thisBarrel.top) === 3 ||
+            CurrentLevel(thisBarrel.top) === 1
+        ) {
+            let yMove
+            console.log('current Level', CurrentLevel(thisBarrel.top));
+            switch (CurrentLevel(thisBarrel.top)) {
+                case 5:
+                    yMove = -dBetweenStages;
+                    console.log('object');
+                    break;
+                case 3:
+                    yMove = (dBetweenStages * 3);
+                    break;
+                case 1:
+                    yMove = - (dBetweenStages * 5);
+                    break;
+            }
+            console.log(yMove);
+            indBarrel.style.transform = `translate(${
+                XdistMoved - 0.1
+            }vw, ${yMove}vh)`;
         }
             
     });
@@ -395,7 +457,7 @@ function moveBarrel(timestamp) {
    
 }
 // console.log(rightBound);
-const gameLoop = (timestamp) => {
+const gameLoop = () => {
     const leftBound =
         element.getBoundingClientRect().left -
         gameScreen.getBoundingClientRect().left;
@@ -459,5 +521,4 @@ export const main = () => {
     });
     newBarrel();
     gameLoop();
-
 };
