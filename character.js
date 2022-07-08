@@ -298,12 +298,11 @@ function up() {
         OnLadder(element.getBoundingClientRect(), CurrentLevel(top - 10), 0, 10)
     ) {
         element.style.position = 'absolute';
-        currentY = Math.round(
+        currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
-                100
-        );
-        currentY += 1;
+            100;
+        currentY += 0.5;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -315,12 +314,11 @@ function down() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (OnLadder(element.getBoundingClientRect(), CurrentLevel(top + 10), 10)) {
         element.style.position = 'absolute';
-        currentY = Math.round(
+        currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
-                100
-        );
-        currentY < 0 ? 0 : (currentY -= 1);
+            100;
+        currentY < 0 ? 0 : (currentY -= 0.5);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
