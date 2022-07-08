@@ -242,12 +242,11 @@ function placeLeft() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
         element.style.position = 'absolute';
-        currentX = Math.round(
+        currentX =
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
-                100
-        );
-        currentX += 1;
+            100;
+        currentX += 0.5;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -259,12 +258,11 @@ function placeRight() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
         element.style.position = 'absolute';
-        currentX = Math.round(
+        currentX =
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
-                100
-        );
-        currentX < 0 ? 0 : (currentX -= 1);
+            100;
+        currentX < 0 ? 0 : (currentX -= 0.5);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -383,16 +381,10 @@ const gameLoop = () => {
     const rightBound =
         gameScreen.getBoundingClientRect().right -
         element.getBoundingClientRect().right;
-
-    if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
-        jump();
-        keys.jump.switch = true;
-    }
-    if (keys.right.pressed && rightBound > 0.5) {
-        console.log(rightBound);
+    if (keys.right.pressed && rightBound > 0.5 && !keys.left.pressed) {
         placeRight();
     }
-    if (keys.left.pressed && leftBound > 0.5) {
+    if (keys.left.pressed && leftBound > 0.5 && !keys.right.pressed) {
         placeLeft();
     }
     if (keys.up.pressed) {
@@ -400,6 +392,10 @@ const gameLoop = () => {
     }
     if (keys.down.pressed) {
         down();
+    }
+    if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
+        jump();
+        keys.jump.switch = true;
     }
     // newBarrel();
     requestAnimationFrame(gameLoop);
