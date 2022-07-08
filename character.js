@@ -375,15 +375,21 @@ function moveBarrel() {
     //Move the barrel by 1vh each time
 }
 
+// console.log(rightBound);
 const gameLoop = () => {
     const leftBound =
         element.getBoundingClientRect().left -
         gameScreen.getBoundingClientRect().left;
+    const rightBound =
+        gameScreen.getBoundingClientRect().right -
+        element.getBoundingClientRect().right;
+
     if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
         jump();
         keys.jump.switch = true;
     }
-    if (keys.right.pressed) {
+    if (keys.right.pressed && rightBound > 0.5) {
+        console.log(rightBound);
         placeRight();
     }
     if (keys.left.pressed && leftBound > 0.5) {
