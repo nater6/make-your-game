@@ -15,6 +15,26 @@ let element = document.getElementById('box');
 
 const gameScreen = document.querySelector('.gameScreen');
 let y = 0;
+const keys = {
+    jump: {
+        pressed: false,
+        switch: false,
+        spam: false,
+    },
+    right: {
+        pressed: false,
+    },
+    left: {
+        pressed: false,
+    },
+    up: {
+        pressed: false,
+    },
+    down: {
+        pressed: false,
+    },
+};
+let jumpSpam = false;
 
 const CurrentLevel = (y_pos) => {
     const getBoundTop = (ind) =>
@@ -258,6 +278,7 @@ function jump() {
         element.style.transform = `translate(-${currentX}vw, -${
             currentY + 5
         }vh)`;
+        keys.jump.spam = true;
         function down() {
             element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
         }
@@ -265,6 +286,9 @@ function jump() {
         //     requestAnimationFrame(down);
         // };
         setTimeout(down, 250);
+        setTimeout(() => {
+            keys.jump.spam = false;
+        }, 500);
     }
 }
 // const updateJump = () => {
@@ -350,29 +374,12 @@ function moveBarrel() {
     if (endReached !== true) window.requestAnimationFrame(moveBarrel);
     //Move the barrel by 1vh each time
 }
-const keys = {
-    jump: {
-        pressed: false,
-        switch: false,
-    },
-    right: {
-        pressed: false,
-    },
-    left: {
-        pressed: false,
-    },
-    up: {
-        pressed: false,
-    },
-    down: {
-        pressed: false,
-    },
-};
+
 const gameLoop = () => {
     const leftBound =
         element.getBoundingClientRect().left -
         gameScreen.getBoundingClientRect().left;
-    if (keys.jump.pressed && !keys.jump.switch) {
+    if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
         jump();
         keys.jump.switch = true;
     }
