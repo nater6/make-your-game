@@ -353,6 +353,7 @@ function moveBarrel() {
 const keys = {
     jump: {
         pressed: false,
+        switch: false,
     },
     right: {
         pressed: false,
@@ -371,8 +372,9 @@ const gameLoop = () => {
     const leftBound =
         element.getBoundingClientRect().left -
         gameScreen.getBoundingClientRect().left;
-    if (keys.jump.pressed) {
+    if (keys.jump.pressed && !keys.jump.switch) {
         jump();
+        keys.jump.switch = true;
     }
     if (keys.right.pressed) {
         placeRight();
@@ -410,6 +412,7 @@ export const main = () => {
     addEventListener('keyup', ({ key }) => {
         if (key === ' ') {
             keys.jump.pressed = false;
+            keys.jump.switch = false;
         }
         if (key === 'ArrowRight') {
             keys.right.pressed = false;
