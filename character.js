@@ -13,11 +13,32 @@ let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
 
 let element = document.getElementById('box');
 
-const getBoundTop = (ind) =>
-    document.getElementById(ind).getBoundingClientRect().top;
+const gameScreen = document.querySelector('.gameScreen');
+let y = 0;
+const keys = {
+    jump: {
+        pressed: false,
+        switch: false,
+        spam: false,
+    },
+    right: {
+        pressed: false,
+    },
+    left: {
+        pressed: false,
+    },
+    up: {
+        pressed: false,
+    },
+    down: {
+        pressed: false,
+    },
+};
+let jumpSpam = false;
 
 const CurrentLevel = (y_pos) => {
-    let y = 0;
+    const getBoundTop = (ind) =>
+        document.getElementById(ind).getBoundingClientRect().top;
     //If cline y is between 0 top and 1 top y = 0
     if (y_pos < getBoundTop(0) && y_pos > getBoundTop(1)) y = 0;
     if (y_pos < getBoundTop(1) && y_pos > getBoundTop(2)) y = 1;
@@ -104,11 +125,9 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                     return false;
                 }
             }
-
             return true;
         }
     }
-
     if (floor === 2 || floor === 3) {
         if (
             (x_pos < ladder_4.left && x_pos > ladder_4.left - ladder_4.width) ||
@@ -121,7 +140,6 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
             ) {
                 return false;
             }
-
             if (floor === 3) {
                 if (
                     x_pos < ladder_5.left &&
@@ -224,35 +242,33 @@ function placeLeft() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
         element.style.position = 'absolute';
-        currentX = Math.round(
+        currentX =
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
-                100
-        );
-        currentX += 1;
+            100;
+        currentX += 0.5;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const moveLeft = () => {
-    requestAnimationFrame(placeLeft);
-};
+// const moveLeft = () => {
+//     requestAnimationFrame(placeLeft);
+// };
 // Move Right
 function placeRight() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
         element.style.position = 'absolute';
-        currentX = Math.round(
+        currentX =
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
-                100
-        );
-        currentX < 0 ? 0 : (currentX -= 1);
+            100;
+        currentX < 0 ? 0 : (currentX -= 0.5);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const moveRight = () => {
-    requestAnimationFrame(placeRight);
-};
+// const moveRight = () => {
+//     requestAnimationFrame(placeRight);
+// };
 
 function jump() {
     let top = parseInt(element.getBoundingClientRect().top);
@@ -260,58 +276,55 @@ function jump() {
         element.style.transform = `translate(-${currentX}vw, -${
             currentY + 5
         }vh)`;
+        keys.jump.spam = true;
         function down() {
             element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
         }
-        const updateDown = () => {
-            requestAnimationFrame(down);
-        };
-        setTimeout(updateDown, 250);
+        // const updateDown = () => {
+        //     requestAnimationFrame(down);
+        // };
+        setTimeout(down, 250);
+        setTimeout(() => {
+            keys.jump.spam = false;
+        }, 500);
     }
 }
-const updateJump = () => {
-    requestAnimationFrame(jump);
-};
+// const updateJump = () => {
+//     requestAnimationFrame(jump);
+// };
 function up() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (
         OnLadder(element.getBoundingClientRect(), CurrentLevel(top - 10), 0, 10)
     ) {
         element.style.position = 'absolute';
-        currentY = Math.round(
+        currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
-                100
-        );
-        currentY += 1;
+            100;
+        currentY += 0.5;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const updateUp = () => {
-    requestAnimationFrame(up);
-};
+// const updateUp = () => {
+//     requestAnimationFrame(up);
+// };
 
 function down() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (OnLadder(element.getBoundingClientRect(), CurrentLevel(top + 10), 10)) {
         element.style.position = 'absolute';
-        currentY = Math.round(
+        currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
-                100
-        );
-        currentY < 0 ? 0 : (currentY -= 1);
+            100;
+        currentY < 0 ? 0 : (currentY -= 0.5);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-const updateDown = () => {
-    requestAnimationFrame(down);
-};
-const keys = {
-    jump: {
-        pressed: false,
-    },
-};
+// const updateDown = () => {
+//     requestAnimationFrame(down);
+// };
 
 let initialPos;
 
@@ -372,33 +385,72 @@ function moveBarrel() {
     if (endReached !== true) window.requestAnimationFrame(moveBarrel);
 }
 
+// console.log(rightBound);
+const gameLoop = () => {
+    const leftBound =
+        element.getBoundingClientRect().left -
+        gameScreen.getBoundingClientRect().left;
+    const rightBound =
+        gameScreen.getBoundingClientRect().right -
+        element.getBoundingClientRect().right;
+    if (keys.right.pressed && rightBound > 0.5 && !keys.left.pressed) {
+        placeRight();
+    }
+    if (keys.left.pressed && leftBound > 0.5 && !keys.right.pressed) {
+        placeLeft();
+    }
+    if (keys.up.pressed) {
+        up();
+    }
+    if (keys.down.pressed) {
+        down();
+    }
+    if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
+        jump();
+        keys.jump.switch = true;
+    }
+    // newBarrel();
+    requestAnimationFrame(gameLoop);
+};
 export const main = () => {
     addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
-            moveRight();
+            keys.right.pressed = true;
         }
         if (e.key === 'ArrowLeft') {
-            moveLeft();
+            keys.left.pressed = true;
         }
         if (e.key === 'ArrowUp') {
-            updateUp();
+            keys.up.pressed = true;
         }
         if (e.key === 'ArrowDown') {
-            updateDown();
+            keys.down.pressed = true;
         }
-        if (e.key === ' ' && !keys.jump.pressed) {
-            updateJump();
+        if (e.key === ' ') {
             keys.jump.pressed = true;
         }
     });
     addEventListener('keyup', ({ key }) => {
         if (key === ' ') {
             keys.jump.pressed = false;
+            keys.jump.switch = false;
+        }
+        if (key === 'ArrowRight') {
+            keys.right.pressed = false;
+        }
+        if (key === 'ArrowLeft') {
+            keys.left.pressed = false;
+        }
+        if (key === 'ArrowUp') {
+            keys.up.pressed = false;
+        }
+        if (key === 'ArrowDown') {
+            keys.down.pressed = false;
         }
     });
-    // setInterval(newBarrel, 2 );
-    console.log('DISTANCE BETWEEN STAGES', dBetweenStages);
-    newBarrel();
-    requestAnimationFrame(moveBarrel);
+    // setInterval(newBarrel, 2);
+    gameLoop();
+
+    // requestAnimationFrame(moveBarrel);
     // requestAnimationFrame(newBarrel);
 };
