@@ -359,7 +359,7 @@ function barrelDrop(divCenter, divTop) {
     //1) Get each barrel with the barrel class
     const blackDivs = document.querySelectorAll('.black');
     //2) Go through the list of each black div
-    let result = false
+    let result = false;
     blackDivs.forEach((div) => {
         //3) If the barrel is on the same level as the div check if the center of the barrel is past the centre of the div if so drop down to next level
         //Calculate the centre point of the current black div
@@ -409,12 +409,13 @@ function moveBarrel() {
         //Move the barrel
         // console.log('tbCenter', tbCenter, 'Barrel Top', thisBarrel.top);
         // let run = barrelDrop(tbCenter, thisBarrel.top);
-        barrelDrop(tbCenter, thisBarrel.top);
+        // barrelDrop(tbCenter, thisBarrel.top);
+        console.log('barrelDrop', barrelDrop(tbCenter, thisBarrel.top))
         if (barrelDrop(tbCenter, thisBarrel.top)) {
             // console.log('DROP HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1')
             let yMove = dBetweenStages / window.innerHeight * 100;
             indBarrel.style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
-        } else if (
+        }else if (
                 CurrentLevel(thisBarrel.top) === 6 ||
                 CurrentLevel(thisBarrel.top) === 4 ||
                 CurrentLevel(thisBarrel.top) === 2 ||
