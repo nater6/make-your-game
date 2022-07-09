@@ -250,9 +250,7 @@ function placeLeft() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-// const moveLeft = () => {
-//     requestAnimationFrame(placeLeft);
-// };
+
 // Move Right
 function placeRight() {
     let top = parseInt(element.getBoundingClientRect().top);
@@ -266,9 +264,6 @@ function placeRight() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-// const moveRight = () => {
-//     requestAnimationFrame(placeRight);
-// };
 
 function jump() {
     let top = parseInt(element.getBoundingClientRect().top);
@@ -280,18 +275,12 @@ function jump() {
         function down() {
             element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
         }
-        // const updateDown = () => {
-        //     requestAnimationFrame(down);
-        // };
         setTimeout(down, 250);
         setTimeout(() => {
             keys.jump.spam = false;
         }, 500);
     }
 }
-// const updateJump = () => {
-//     requestAnimationFrame(jump);
-// };
 function up() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (
@@ -306,9 +295,6 @@ function up() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-// const updateUp = () => {
-//     requestAnimationFrame(up);
-// };
 
 function down() {
     let top = parseInt(element.getBoundingClientRect().top);
@@ -322,10 +308,6 @@ function down() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-// const updateDown = () => {
-//     requestAnimationFrame(down);
-// };
-
 let initialPos;
 
 let dBetweenStages = getBoundTop(0) - getBoundTop(1);
@@ -354,7 +336,6 @@ function newBarrel() {
 
 //Get the distance between two stages in pixels
 function barrelDrop(divCenter, divTop) {
-    // console.log('Checking');
     //1) Get each barrel with the barrel class
     const blackDivs = document.querySelectorAll('.black');
     //2) Go through the list of each black div
@@ -366,22 +347,6 @@ function barrelDrop(divCenter, divTop) {
             (div.getBoundingClientRect().right +
                 div.getBoundingClientRect().left) /
             2;
-        // console.log('BlackDivCenter', blackDivCenter);
-        // console.log(
-        //     'blackdiv curr level = ',
-        //     CurrentLevel(div.top),
-        //     'barrel curr level',
-        //     CurrentLevel(divTop)
-        // );
-        // console.log('div CurrentLEvel', CurrentLevel(div.getBoundingClientRect().bottom));
-        // console.log(
-        //     'BLACK DIV LEFT RIGHT TOP BOTTOM',
-        //     div.getBoundingClientRect().left,
-        //     div.getBoundingClientRect().right,
-        //     div.getBoundingClientRect().top,
-        //     div.getBoundingClientRect().bottom
-        // );
-        // console.log('div current level', CurrentLevel(div.getBoundingClientRect().bottom), 'Black top', div.getBoundingClientRect().top, 'barrel current level', CurrentLevel(divTop));
         if (
             CurrentLevel(div.getBoundingClientRect().bottom) ===
             CurrentLevel(divTop) - 1
@@ -418,18 +383,13 @@ function moveBarrel() {
 
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
-        
+
         const XdistMoved =
-        ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
+            ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
         const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
-        //Move the barrel
-        // console.log('tbCenter', tbCenter, 'Barrel Top', thisBarrel.top);
-        // let run = barrelDrop(tbCenter, thisBarrel.top);
-        // barrelDrop(tbCenter, thisBarrel.top);
-        // console.log('barrelDrop', barrelDrop(tbCenter, thisBarrel.top))
         //If the barrel is at the end remove it
-        if (thisBarrel.left > startingX && thisBarrel.bottomm > startingY) {
-            console.log('THE END IS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
+            indBarrel.remove();
         }
         if (barrelDrop(tbCenter, thisBarrel.top)) {
             // console.log('DROP HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1')

@@ -145,7 +145,7 @@ body {
     height: 3%;
     width: 1.5%;
     position: absolute;
-    z-index: 1000;
+    z-index: 99;
 }
 .barrelImg {
     width: 100%;
