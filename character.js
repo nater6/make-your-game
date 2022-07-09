@@ -1,5 +1,5 @@
-let startingX = document.querySelector('#box').getBoundingClientRect().left;
-let startingY = document.querySelector('#box').getBoundingClientRect().top;
+const startingX = document.querySelector('#box').getBoundingClientRect().left;
+const startingY = document.querySelector('#box').getBoundingClientRect().top;
 let currentX = 0;
 let currentY = 0;
 
@@ -35,10 +35,10 @@ const keys = {
 };
 let jumpSpam = false;
 
-const getBoundTop = (ind) => document.getElementById(ind).getBoundingClientRect().top;
+const getBoundTop = (ind) =>
+    document.getElementById(ind).getBoundingClientRect().top;
 let y = 0;
 const CurrentLevel = (y_pos) => {
-
     //If cline y is between 0 top and 1 top y = 0
     if (y_pos < getBoundTop(0) && y_pos > getBoundTop(1)) y = 0;
     if (y_pos < getBoundTop(1) && y_pos > getBoundTop(2)) y = 1;
@@ -328,8 +328,7 @@ function down() {
 
 let initialPos;
 
-
-let dBetweenStages = getBoundTop(0) - getBoundTop(1)
+let dBetweenStages = getBoundTop(0) - getBoundTop(1);
 const donkeyKong = document.querySelector('.donkey-kong-class');
 const bounds = donkeyKong.getBoundingClientRect();
 function newBarrel() {
@@ -345,9 +344,9 @@ function newBarrel() {
     const bottomStages = document.querySelector('.bottom-stages');
     const topPlatform = document.getElementById('6');
     //Put the barrel next to donkey kong
-    
-    barrel.style.left = `${bounds.right- (bounds.right-bounds.left)}px`;
-    barrel.style.top = `${(bounds.bottom) - window.innerHeight * 0.0325}px`;
+
+    barrel.style.left = `${bounds.right - (bounds.right - bounds.left)}px`;
+    barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
     bottomStages.insertBefore(barrel, topPlatform);
     //Get the initial position of each barrel
     initialPos = barrel.getBoundingClientRect();
@@ -363,7 +362,10 @@ function barrelDrop(divCenter, divTop) {
     blackDivs.forEach((div) => {
         //3) If the barrel is on the same level as the div check if the center of the barrel is past the centre of the div if so drop down to next level
         //Calculate the centre point of the current black div
-        let blackDivCenter = (div.getBoundingClientRect().right + div.getBoundingClientRect().left) / 2
+        let blackDivCenter =
+            (div.getBoundingClientRect().right +
+                div.getBoundingClientRect().left) /
+            2;
         // console.log('BlackDivCenter', blackDivCenter);
         // console.log(
         //     'blackdiv curr level = ',
@@ -379,97 +381,139 @@ function barrelDrop(divCenter, divTop) {
         //     div.getBoundingClientRect().top,
         //     div.getBoundingClientRect().bottom
         // );
-        // console.log('Test', CurrentLevel(div.getBoundingClientRect().bottom));
-        if (CurrentLevel(div.getBoundingClientRect().bottom) === CurrentLevel(divTop)-1 && blackDivCenter < divCenter) {
-            result = true
+        // console.log('div current level', CurrentLevel(div.getBoundingClientRect().bottom), 'Black top', div.getBoundingClientRect().top, 'barrel current level', CurrentLevel(divTop));
+        if (
+            CurrentLevel(div.getBoundingClientRect().bottom) ===
+            CurrentLevel(divTop) - 1
+        ) {
+            if (
+                CurrentLevel(divTop) === 6 ||
+                CurrentLevel(divTop) === 4 ||
+                CurrentLevel(divTop) === 2 ||
+                CurrentLevel(divTop) === 0
+            ) {
+                if (blackDivCenter < divCenter) result = true;
+            }
+            if (
+                CurrentLevel(divTop) === 5 ||
+                CurrentLevel(divTop) === 3 ||
+                CurrentLevel(divTop) === 1
+            ) {
+                if (blackDivCenter > divCenter) result = true;
+            }
         }
     });
-    return result
+    return result;
 }
 
-let newB = 0
+let newB = 0;
 function moveBarrel() {
-    
-    // newB++
-    // if (newB === 500) {
-    //     newBarrel()
-    //     newB = 0
-    // }
+    newB++;
+    if (newB === 500) {
+        newBarrel();
+        newB = 0;
+    }
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
-    
+
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
-        // console.log(CurrentLevel(thisBarrel.top));
-        console.log('Barrels current level =====', CurrentLevel(thisBarrel.top));
         
         const XdistMoved =
-            ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
-        const tbCenter = (thisBarrel.right + thisBarrel.left) /2
+        ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
+        const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
         //Move the barrel
         // console.log('tbCenter', tbCenter, 'Barrel Top', thisBarrel.top);
         // let run = barrelDrop(tbCenter, thisBarrel.top);
         // barrelDrop(tbCenter, thisBarrel.top);
-        console.log('barrelDrop', barrelDrop(tbCenter, thisBarrel.top))
+        // console.log('barrelDrop', barrelDrop(tbCenter, thisBarrel.top))
+        //If the barrel is at the end remove it
+        if (thisBarrel.left > startingX && thisBarrel.bottomm > startingY) {
+            console.log('THE END IS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        }
         if (barrelDrop(tbCenter, thisBarrel.top)) {
             // console.log('DROP HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1')
-            let yMove = dBetweenStages / window.innerHeight * 100;
-            indBarrel.style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
-        }else if (
-                CurrentLevel(thisBarrel.top) === 6 ||
-                CurrentLevel(thisBarrel.top) === 4 ||
-                CurrentLevel(thisBarrel.top) === 2 ||
-                CurrentLevel(thisBarrel.top) === 0
-            ) {
-                // console.log('BLACKDIV ====', barrelDrop(tbCenter, thisBarrel.top));
-                // console.log('BarrelLevel', CurrentLevel(thisBarrel.top));
-                let yMove;
-
-                switch (CurrentLevel(thisBarrel.top)) {
-                    case 6:
-                        yMove = 0;
-                        break;
-                    case 4:
-                        yMove = -dBetweenStages * 2;
-                        break;
-                    case 2:
-                        yMove = -dBetweenStages * 4;
-                        break;
-                    case 0:
-                        yMove = -dBetweenStages * 6;
-                        break;
-                }
-                // console.log('YMOVE=====', yMove);
-
-                indBarrel.style.transform = `translate(${XdistMoved + 0.1
-                    }vw, ${yMove}vh)`;
-            }else if (
-                CurrentLevel(thisBarrel.top) === 5 ||
-                CurrentLevel(thisBarrel.top) === 3 ||
-                CurrentLevel(thisBarrel.top) === 1
-            ) {
-                let yMove
-                console.log('current Level=====================================================', CurrentLevel(thisBarrel.top));
-                switch (CurrentLevel(thisBarrel.top)) {
-                    case 5:
-                        yMove = -dBetweenStages;
-                        console.log('Case 5!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-                        break;
-                    case 3:
-                        yMove = -(dBetweenStages * 3);
-                        break;
-                    case 1:
-                        yMove = -(dBetweenStages * 5);
-                        break;
-                }
-                console.log('Ymove====================================', yMove);
-                indBarrel.style.transform = `translate(${XdistMoved - 0.1
-                    }vw, ${yMove}vh)`;
+            let yMove = (dBetweenStages / window.innerHeight) * 100;
+            switch (CurrentLevel(thisBarrel.top)) {
+                case 5:
+                    yMove *= 2;
+                    break;
+                case 4:
+                    yMove *= 3;
+                    break;
+                case 3:
+                    yMove *= 4;
+                    break;
+                case 2:
+                    yMove *= 5;
+                    break;
+                case 1:
+                    yMove *= 6;
+                    break;
             }
-            
-    });
+            indBarrel.style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
+        } else if (
+            CurrentLevel(thisBarrel.top) === 6 ||
+            CurrentLevel(thisBarrel.top) === 4 ||
+            CurrentLevel(thisBarrel.top) === 2 ||
+            CurrentLevel(thisBarrel.top) === 0
+        ) {
+            // console.log('BLACKDIV ====', barrelDrop(tbCenter, thisBarrel.top));
+            // console.log('BarrelLevel', CurrentLevel(thisBarrel.top));
+            let yMove;
 
-   
+            switch (CurrentLevel(thisBarrel.top)) {
+                case 6:
+                    yMove = 0;
+                    break;
+                case 4:
+                    yMove = ((dBetweenStages * 2) / window.innerHeight) * 100;
+
+                    break;
+                case 2:
+                    yMove = ((dBetweenStages * 4) / window.innerHeight) * 100;
+
+                    break;
+                case 0:
+                    yMove = ((dBetweenStages * 6) / window.innerHeight) * 100;
+
+                    break;
+            }
+            // console.log('YMOVE=====', yMove);
+
+            indBarrel.style.transform = `translate(${
+                XdistMoved + 0.1
+            }vw, ${yMove}vh)`;
+        } else if (
+            CurrentLevel(thisBarrel.top) === 5 ||
+            CurrentLevel(thisBarrel.top) === 3 ||
+            CurrentLevel(thisBarrel.top) === 1
+        ) {
+            let yMove;
+            // console.log(
+            //     'current Level=====================================================',
+            //     CurrentLevel(thisBarrel.top)
+            // );
+            switch (CurrentLevel(thisBarrel.top)) {
+                case 5:
+                    yMove = (dBetweenStages / window.innerHeight) * 100;
+                    // console.log(
+                    //     'Case 5!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+                    // );
+                    break;
+                case 3:
+                    yMove = ((dBetweenStages * 3) / window.innerHeight) * 100;
+                    break;
+                case 1:
+                    yMove = ((dBetweenStages * 5) / window.innerHeight) * 100;
+                    break;
+            }
+            // console.log('Ymove====================================', yMove);
+            indBarrel.style.transform = `translate(${
+                XdistMoved - 0.1
+            }vw, ${yMove}vh)`;
+        }
+    });
 }
 // console.log(rightBound);
 const gameLoop = () => {
