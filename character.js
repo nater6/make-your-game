@@ -14,6 +14,10 @@ let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
 let element = document.getElementById('box');
 
 const gameScreen = document.querySelector('.gameScreen');
+
+let leftBound ;
+let rightBound ;
+
 const keys = {
     jump: {
         pressed: false,
@@ -275,7 +279,10 @@ function placeRight() {
 function jump(direction = 0) {
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
+        if( rightBound > 0.5 &&
+            leftBound  > 0.5){
         currentX = currentX + direction;
+    }
         element.style.transform = `translate(-${currentX}vw, -${
             currentY + 5
         }vh)`;
@@ -498,10 +505,10 @@ function moveBarrel() {
 // console.log(rightBound);
 const gameLoop = () => {
     if (!paused) {
-        const leftBound =
+         leftBound =
             element.getBoundingClientRect().left -
             gameScreen.getBoundingClientRect().left;
-        const rightBound =
+         rightBound =
             gameScreen.getBoundingClientRect().right -
             element.getBoundingClientRect().right;
 
@@ -510,11 +517,14 @@ const gameLoop = () => {
             !keys.jump.switch &&
             !keys.jump.spam &&
             (keys.right.pressed || keys.left.pressed)
+          
         ) {
-            if (keys.left.pressed) {
-                jump(3);
-            } else if (keys.right.pressed) {
-                jump(-3);
+            if (keys.left.pressed &&
+                leftBound > 63) {
+                jump(2);
+            } else if (keys.right.pressed &&
+                rightBound > 6) {
+                jump(-2);
             }
             keys.jump.switch = true;
         }
