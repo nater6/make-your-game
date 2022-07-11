@@ -12,7 +12,8 @@ let ladder_6 = document.getElementById('ladder_6').getBoundingClientRect();
 let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
 
 let element = document.getElementById('box');
-
+let timerId = document.getElementById('timer-Id');
+let gameFrame = 0;
 const gameScreen = document.querySelector('.gameScreen');
 const keys = {
     jump: {
@@ -39,7 +40,7 @@ const keys = {
         pressed: false,
     },
 };
-let paused = false
+let paused = false;
 let jumpSpam = false;
 
 const getBoundTop = (ind) =>
@@ -377,16 +378,15 @@ function barrelDrop(divCenter, divTop) {
     });
     return result;
 }
-let pausedMenu =  document.getElementsByClassName("pausedMenu")[0];
+let pausedMenu = document.getElementsByClassName('pausedMenu')[0];
 function togglePauseMenu() {
     paused = !paused;
-    console.log("kg")
-   if(paused) {
-    pausedMenu.style.display = "block"
-   } else{
-    pausedMenu.style.display = "none"
-
-   }
+    console.log('kg');
+    if (paused) {
+        pausedMenu.style.display = 'block';
+    } else {
+        pausedMenu.style.display = 'none';
+    }
 }
 
 let newB = 0;
@@ -493,34 +493,51 @@ function moveBarrel() {
         }
     });
 }
+const MinutesAndSeconds = (millis) => {
+    let minutes = Math.floor(millis / 60);
+    let min = 0;
+    if (minutes > 60) {
+        min = Math.floor(minutes / 60);
+        minutes = Math.floor(minutes - min * 60);
+        console.log(minutes);
+    }
+    let seconds = Math.floor(millis % 60);
+    //ES6 interpolated literals/template literals
+    //If seconds is less than 10 put a zero in front.
+    return `${min < 10 ? '0' : ''}${min}:${minutes < 10 ? '0' : ''}${minutes}:${
+        seconds < 10 ? '0' : ''
+    }${seconds}`;
+};
 // console.log(rightBound);
 const gameLoop = () => {
-    if(!paused) {
-    const leftBound =
-        element.getBoundingClientRect().left -
-        gameScreen.getBoundingClientRect().left;
-    const rightBound =
-        gameScreen.getBoundingClientRect().right -
-        element.getBoundingClientRect().right;
-    if (keys.right.pressed && rightBound > 0.5 && !keys.left.pressed) {
-        placeRight();
+    if (!paused) {
+        const leftBound =
+            element.getBoundingClientRect().left -
+            gameScreen.getBoundingClientRect().left;
+        const rightBound =
+            gameScreen.getBoundingClientRect().right -
+            element.getBoundingClientRect().right;
+        if (keys.right.pressed && rightBound > 0.5 && !keys.left.pressed) {
+            placeRight();
+        }
+        if (keys.left.pressed && leftBound > 0.5 && !keys.right.pressed) {
+            placeLeft();
+        }
+        if (keys.up.pressed) {
+            up();
+        }
+        if (keys.down.pressed) {
+            down();
+        }
+        if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
+            jump();
+            keys.jump.switch = true;
+        }
+        moveBarrel();
+        console.log(MinutesAndSeconds(gameFrame));
+        timerId.innerText = MinutesAndSeconds(gameFrame);
+        gameFrame++;
     }
-    if (keys.left.pressed && leftBound > 0.5 && !keys.right.pressed) {
-        placeLeft();
-    }
-    if (keys.up.pressed) {
-        up();
-    }
-    if (keys.down.pressed) {
-        down();
-    }
-
-    if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
-        jump();
-        keys.jump.switch = true;
-    }
-    moveBarrel();
-}
     requestAnimationFrame(gameLoop);
 };
 export const main = () => {
@@ -541,7 +558,7 @@ export const main = () => {
             keys.jump.pressed = true;
         }
         if (e.key === 'p') {
-            togglePauseMenu()
+            togglePauseMenu();
         }
     });
     addEventListener('keyup', ({ key }) => {
