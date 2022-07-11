@@ -32,7 +32,14 @@ const keys = {
     down: {
         pressed: false,
     },
+    paused: {
+        pressed: false,
+    },
+    start: {
+        pressed: false,
+    },
 };
+let paused = false
 let jumpSpam = false;
 
 const getBoundTop = (ind) =>
@@ -370,6 +377,17 @@ function barrelDrop(divCenter, divTop) {
     });
     return result;
 }
+let pausedMenu =  document.getElementsByClassName("pausedMenu")[0];
+function togglePauseMenu() {
+    paused = !paused;
+    console.log("kg")
+   if(paused) {
+    pausedMenu.style.display = "block"
+   } else{
+    pausedMenu.style.display = "none"
+
+   }
+}
 
 let newB = 0;
 function moveBarrel() {
@@ -477,6 +495,7 @@ function moveBarrel() {
 }
 // console.log(rightBound);
 const gameLoop = () => {
+    if(!paused) {
     const leftBound =
         element.getBoundingClientRect().left -
         gameScreen.getBoundingClientRect().left;
@@ -495,11 +514,13 @@ const gameLoop = () => {
     if (keys.down.pressed) {
         down();
     }
+
     if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
         jump();
         keys.jump.switch = true;
     }
     moveBarrel();
+}
     requestAnimationFrame(gameLoop);
 };
 export const main = () => {
@@ -519,6 +540,9 @@ export const main = () => {
         if (e.key === ' ') {
             keys.jump.pressed = true;
         }
+        if (e.key === 'p') {
+            togglePauseMenu()
+        }
     });
     addEventListener('keyup', ({ key }) => {
         if (key === ' ') {
@@ -536,6 +560,9 @@ export const main = () => {
         }
         if (key === 'ArrowDown') {
             keys.down.pressed = false;
+        }
+        if (key === 'p') {
+            keys.paused.pressed = false;
         }
     });
     newBarrel();
