@@ -284,7 +284,7 @@ function jump(direction = 0) {
             currentX = currentX + direction;
         }
         element.style.transform = `translate(-${currentX}vw, -${
-            currentY + 5
+            currentY + 8
         }vh)`;
 
         keys.jump.spam = true;
@@ -292,7 +292,7 @@ function jump(direction = 0) {
             currentX = currentX + direction;
             element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
         }
-        setTimeout(down, 250);
+        setTimeout(down, 350);
         setTimeout(() => {
             keys.jump.spam = false;
         }, 500);
@@ -331,6 +331,7 @@ let initialPos;
 let dBetweenStages = getBoundTop(0) - getBoundTop(1);
 const donkeyKong = document.querySelector('.donkey-kong-class');
 const bounds = donkeyKong.getBoundingClientRect();
+
 function newBarrel() {
     //Create the div to hold the barrel and the image for the barrel
     const barrel = document.createElement('div');
@@ -339,6 +340,7 @@ function newBarrel() {
     barrelImg.setAttribute('src', './images/background1.png');
     barrelImg.setAttribute('class', 'barrelImg');
     barrel.append(barrelImg);
+    barrel.setAttribute('data-passed', 'false');
     barrel.setAttribute('class', 'barrel');
     //Get the HTMLelement of the top stage crane
     const bottomStages = document.querySelector('.bottom-stages');
@@ -352,7 +354,27 @@ function newBarrel() {
     initialPos = barrel.getBoundingClientRect();
 }
 
-//Get the distance between two stages in pixels
+function barrelPass(barrel, indBarrel) {
+    const charBounds = element.getBoundingClientRect();
+    const passed = indBarrel.getAttribute("data-passed")
+    // console.log(20/window.innerHeight * 100);
+    //Check if the bound sof the barrel overlap with the bouns of the character(If they do return "dead")
+    console.log(passed)
+    if (
+        CurrentLevel(barrel.top) === CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
+    ) {
+        //Check if the left of the barrel is passed the right of the barrel && data-passed === "true" (if so return "score" and set data-passed back to false)
+        if (charBounds.left > barrel.right) {
+            if (passed === "true") {
+                indBarrel.setAttribute("data-passed", "false") 
+            return "score"
+            } else {
+                indBarrel.setAttribute("data-passed", "true") 
+            }
+        }
+    }
+}
+
 function barrelDrop(divCenter, divTop) {
     //1) Get each barrel with the barrel class
     const blackDivs = document.querySelectorAll('.black');
@@ -410,7 +432,7 @@ function moveBarrel() {
 
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
-
+        barrelPass(thisBarrel, indBarrel);
         const XdistMoved =
             ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
         const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
@@ -419,7 +441,6 @@ function moveBarrel() {
             indBarrel.remove();
         }
         if (barrelDrop(tbCenter, thisBarrel.top)) {
-            // console.log('DROP HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1')
             let yMove = (dBetweenStages / window.innerHeight) * 100;
             switch (CurrentLevel(thisBarrel.top)) {
                 case 5:
@@ -445,8 +466,6 @@ function moveBarrel() {
             CurrentLevel(thisBarrel.top) === 2 ||
             CurrentLevel(thisBarrel.top) === 0
         ) {
-            // console.log('BLACKDIV ====', barrelDrop(tbCenter, thisBarrel.top));
-            // console.log('BarrelLevel', CurrentLevel(thisBarrel.top));
             let yMove;
 
             switch (CurrentLevel(thisBarrel.top)) {
@@ -466,10 +485,9 @@ function moveBarrel() {
 
                     break;
             }
-            // console.log('YMOVE=====', yMove);
 
             indBarrel.style.transform = `translate(${
-                XdistMoved + 0.1
+                XdistMoved + 0.2
             }vw, ${yMove}vh)`;
         } else if (
             CurrentLevel(thisBarrel.top) === 5 ||
@@ -477,16 +495,11 @@ function moveBarrel() {
             CurrentLevel(thisBarrel.top) === 1
         ) {
             let yMove;
-            // console.log(
-            //     'current Level=====================================================',
-            //     CurrentLevel(thisBarrel.top)
-            // );
+
             switch (CurrentLevel(thisBarrel.top)) {
                 case 5:
                     yMove = (dBetweenStages / window.innerHeight) * 100;
-                    // console.log(
-                    //     'Case 5!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-                    // );
+
                     break;
                 case 3:
                     yMove = ((dBetweenStages * 3) / window.innerHeight) * 100;
@@ -495,9 +508,8 @@ function moveBarrel() {
                     yMove = ((dBetweenStages * 5) / window.innerHeight) * 100;
                     break;
             }
-            // console.log('Ymove====================================', yMove);
             indBarrel.style.transform = `translate(${
-                XdistMoved - 0.1
+                XdistMoved - 0.2
             }vw, ${yMove}vh)`;
         }
     });
@@ -508,7 +520,7 @@ const MinutesAndSeconds = (millis) => {
     if (minutes > 60) {
         min = Math.floor(minutes / 60);
         minutes = Math.floor(minutes - min * 60);
-        console.log(minutes);
+        // console.log(minutes);
     }
     let seconds = Math.floor(millis % 60);
     //ES6 interpolated literals/template literals
@@ -517,7 +529,6 @@ const MinutesAndSeconds = (millis) => {
         seconds < 10 ? '0' : ''
     }${seconds}`;
 };
-// console.log(rightBound);
 const gameLoop = () => {
     if (!paused) {
         leftBound =
@@ -568,7 +579,7 @@ const gameLoop = () => {
             keys.jump.switch = true;
         }
         moveBarrel();
-        console.log(MinutesAndSeconds(gameFrame));
+        // console.log(MinutesAndSeconds(gameFrame));
         timerId.innerText = MinutesAndSeconds(gameFrame);
         gameFrame++;
     }
