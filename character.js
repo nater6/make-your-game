@@ -246,7 +246,7 @@ function placeLeft() {
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
             100;
-        currentX += 0.5;
+        currentX += 0.25;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -260,7 +260,7 @@ function placeRight() {
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
             100;
-        currentX < 0 ? 0 : (currentX -= 0.5);
+        currentX < 0 ? 0 : (currentX -= 0.25);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -291,7 +291,7 @@ function up() {
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
             100;
-        currentY += 0.5;
+        currentY += 0.25;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
