@@ -366,7 +366,7 @@ function barrelPass(barrel, indBarrel) {
     ) {
         //Check if the left of the barrel is passed the right of the barrel && data-passed === "true" (if so return "score" and set data-passed back to false)
         if ([6,4,2,0].includes(CurrentLevel(barrel.top))) {
-            if (charBounds.left < barrel.right) {
+            if (charBounds.right < barrel.left) {
             if (passed === "true") {
                 indBarrel.setAttribute("data-passed", "scored") 
             return "score"
