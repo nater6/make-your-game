@@ -1,15 +1,18 @@
 * {
     box-sizing: border-box;
 }
-
+html {
+    margin: 0;
+}
 body {
     margin: 0;
+    padding: 0;
     border: 0;
     width: 100vw;
     height: 100vh;
     display: grid;
     justify-content: center;
-    grid-template-columns: repeat(3, 33%);
+    grid-template-columns: repeat(3, 33.3333333333%);
     overflow: hidden;
 }
 
@@ -150,4 +153,11 @@ body {
 .barrelImg {
     width: 100%;
     height: 100%;
+}
+.scoring {
+    background-color: black;
+    color: white;
+}
+.menu {
+    background-color: black;
 }
