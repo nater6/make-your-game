@@ -357,21 +357,26 @@ function newBarrel() {
 function barrelPass(barrel, indBarrel) {
     const charBounds = element.getBoundingClientRect();
     const passed = indBarrel.getAttribute("data-passed")
-    // console.log(20/window.innerHeight * 100);
-    //Check if the bound sof the barrel overlap with the bouns of the character(If they do return "dead")
+    //Check if the bounds of the barrel overlap with the bouns of the character(If they do return "dead")
     console.log(passed)
     if (
         CurrentLevel(barrel.top) === CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
     ) {
         //Check if the left of the barrel is passed the right of the barrel && data-passed === "true" (if so return "score" and set data-passed back to false)
-        if (charBounds.left > barrel.right) {
+        if () {
+            if (charBounds.left > barrel.right) {
             if (passed === "true") {
-                indBarrel.setAttribute("data-passed", "false") 
+                indBarrel.setAttribute("data-passed", "scored") 
             return "score"
-            } else {
+            } else if (passed === "false") {
                 indBarrel.setAttribute("data-passed", "true") 
             }
         }
+        }
+        
+    }
+    if (CurrentLevel(barrel.top) !== CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)) {
+        if (passed === "scored") indBarrel.setAttribute('data-passed', 'false'); 
     }
 }
 
@@ -422,11 +427,11 @@ function togglePauseMenu() {
 
 let newB = 0;
 function moveBarrel() {
-    newB++;
-    if (newB === 500) {
-        newBarrel();
-        newB = 0;
-    }
+    // newB++;
+    // if (newB === 500) {
+    //     newBarrel();
+    //     newB = 0;
+    // }
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
 
