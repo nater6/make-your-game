@@ -358,13 +358,9 @@ function barrelPass(barrel, indBarrel) {
     const charBounds = element.getBoundingClientRect();
     const passed = indBarrel.getAttribute("data-passed")
     //Check if the bounds of the barrel overlap with the bouns of the character(If they do return "dead")
-    const barrelInChar = (pos) => {
-        if (pos < charBounds.right && pos > charBounds.left &&  ) 
-        if (pos > charBounds.left) 
-        if (pos < charBounds.right) 
-        if (pos < charBounds.right) 
-    }
-    console.log(passed, CurrentLevel(barrel.top));
+    //Check if the left and right of the barrel are inside the characters div => if they are check the bottom of the character is less than the top of the barrel
+    
+    // console.log(passed, CurrentLevel(barrel.top));
     if (
         CurrentLevel(barrel.top) === CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
     ) {
@@ -442,17 +438,17 @@ function togglePauseMenu() {
 
 let newB = 0;
 function moveBarrel() {
-    // newB++;
-    // if (newB === 500) {
-    //     newBarrel();
-    //     newB = 0;
-    // }
+    newB++;
+    if (newB === 500) {
+        newBarrel();
+        newB = 0;
+    }
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
 
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
-        barrelPass(thisBarrel, indBarrel);
+        console.log(barrelPass(thisBarrel, indBarrel));
         const XdistMoved =
             ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
         const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
