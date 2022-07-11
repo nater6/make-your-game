@@ -15,6 +15,10 @@ let element = document.getElementById('box');
 let timerId = document.getElementById('timer-Id');
 let gameFrame = 0;
 const gameScreen = document.querySelector('.gameScreen');
+
+let leftBound;
+let rightBound;
+
 const keys = {
     jump: {
         pressed: false,
@@ -254,7 +258,7 @@ function placeLeft() {
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
             100;
-        currentX += 0.25;
+        currentX += 0.16;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -268,19 +272,24 @@ function placeRight() {
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
             100;
-        currentX < 0 ? 0 : (currentX -= 0.25);
+        currentX < 0 ? 0 : (currentX -= 0.16);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
 
-function jump() {
+function jump(direction = 0) {
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
+        if (rightBound > 0.5 && leftBound > 0.5) {
+            currentX = currentX + direction;
+        }
         element.style.transform = `translate(-${currentX}vw, -${
             currentY + 5
         }vh)`;
+
         keys.jump.spam = true;
         function down() {
+            currentX = currentX + direction;
             element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
         }
         setTimeout(down, 250);
@@ -289,6 +298,7 @@ function jump() {
         }, 500);
     }
 }
+
 function up() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (
@@ -381,7 +391,6 @@ function barrelDrop(divCenter, divTop) {
 let pausedMenu = document.getElementsByClassName('pausedMenu')[0];
 function togglePauseMenu() {
     paused = !paused;
-    console.log('kg');
     if (paused) {
         pausedMenu.style.display = 'block';
     } else {
@@ -511,16 +520,41 @@ const MinutesAndSeconds = (millis) => {
 // console.log(rightBound);
 const gameLoop = () => {
     if (!paused) {
-        const leftBound =
+        leftBound =
             element.getBoundingClientRect().left -
             gameScreen.getBoundingClientRect().left;
-        const rightBound =
+        rightBound =
             gameScreen.getBoundingClientRect().right -
             element.getBoundingClientRect().right;
-        if (keys.right.pressed && rightBound > 0.5 && !keys.left.pressed) {
+
+        if (
+            keys.jump.pressed &&
+            !keys.jump.switch &&
+            !keys.jump.spam &&
+            (keys.right.pressed || keys.left.pressed)
+        ) {
+            if (keys.left.pressed && leftBound > 63) {
+                jump(2);
+            } else if (keys.right.pressed && rightBound > 6) {
+                jump(-2);
+            }
+            keys.jump.switch = true;
+        }
+
+        if (
+            keys.right.pressed &&
+            rightBound > 0.5 &&
+            !keys.left.pressed &&
+            !keys.jump.spam
+        ) {
             placeRight();
         }
-        if (keys.left.pressed && leftBound > 0.5 && !keys.right.pressed) {
+        if (
+            keys.left.pressed &&
+            leftBound > 0.5 &&
+            !keys.right.pressed &&
+            !keys.jump.spam
+        ) {
             placeLeft();
         }
         if (keys.up.pressed) {
