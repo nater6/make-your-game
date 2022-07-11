@@ -358,22 +358,37 @@ function barrelPass(barrel, indBarrel) {
     const charBounds = element.getBoundingClientRect();
     const passed = indBarrel.getAttribute("data-passed")
     //Check if the bounds of the barrel overlap with the bouns of the character(If they do return "dead")
-    console.log(passed)
+    const barrelInChar = (pos) => {
+        if (pos < charBounds.right && pos > charBounds.left &&  ) 
+        if (pos > charBounds.left) 
+        if (pos < charBounds.right) 
+        if (pos < charBounds.right) 
+    }
+    console.log(passed, CurrentLevel(barrel.top));
     if (
         CurrentLevel(barrel.top) === CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
     ) {
         //Check if the left of the barrel is passed the right of the barrel && data-passed === "true" (if so return "score" and set data-passed back to false)
-        if () {
-            if (charBounds.left > barrel.right) {
+        if ([6,4,2,0].includes(CurrentLevel(barrel.top))) {
+            if (charBounds.left < barrel.right) {
             if (passed === "true") {
                 indBarrel.setAttribute("data-passed", "scored") 
             return "score"
             } else if (passed === "false") {
                 indBarrel.setAttribute("data-passed", "true") 
+                }
+        }
+        } 
+        if ([5, 3, 1].includes(CurrentLevel(barrel.top))) {
+            if (charBounds.left > barrel.right) {
+                if (passed === 'true') {
+                    indBarrel.setAttribute('data-passed', 'scored');
+                    return 'score';
+                } else if (passed === 'false') {
+                    indBarrel.setAttribute('data-passed', 'true');
+                }
             }
-        }
-        }
-        
+        } 
     }
     if (CurrentLevel(barrel.top) !== CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)) {
         if (passed === "scored") indBarrel.setAttribute('data-passed', 'false'); 
