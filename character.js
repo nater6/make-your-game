@@ -39,7 +39,7 @@ const keys = {
         pressed: false,
     },
 };
-let paused = false
+let paused = false;
 let jumpSpam = false;
 
 const getBoundTop = (ind) =>
@@ -253,7 +253,7 @@ function placeLeft() {
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
             100;
-        currentX += 0.5;
+        currentX += 0.16;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -267,19 +267,22 @@ function placeRight() {
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
             100;
-        currentX < 0 ? 0 : (currentX -= 0.5);
+        currentX < 0 ? 0 : (currentX -= 0.16);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
 
-function jump() {
+function jump(direction = 0) {
     let top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
+        currentX = currentX + direction;
         element.style.transform = `translate(-${currentX}vw, -${
             currentY + 5
         }vh)`;
+
         keys.jump.spam = true;
         function down() {
+            currentX = currentX + direction;
             element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
         }
         setTimeout(down, 250);
@@ -288,6 +291,7 @@ function jump() {
         }, 500);
     }
 }
+
 function up() {
     let top = parseInt(element.getBoundingClientRect().top);
     if (
@@ -377,16 +381,14 @@ function barrelDrop(divCenter, divTop) {
     });
     return result;
 }
-let pausedMenu =  document.getElementsByClassName("pausedMenu")[0];
+let pausedMenu = document.getElementsByClassName('pausedMenu')[0];
 function togglePauseMenu() {
     paused = !paused;
-    console.log("kg")
-   if(paused) {
-    pausedMenu.style.display = "block"
-   } else{
-    pausedMenu.style.display = "none"
-
-   }
+    if (paused) {
+        pausedMenu.style.display = 'block';
+    } else {
+        pausedMenu.style.display = 'none';
+    }
 }
 
 let newB = 0;
@@ -495,32 +497,57 @@ function moveBarrel() {
 }
 // console.log(rightBound);
 const gameLoop = () => {
-    if(!paused) {
-    const leftBound =
-        element.getBoundingClientRect().left -
-        gameScreen.getBoundingClientRect().left;
-    const rightBound =
-        gameScreen.getBoundingClientRect().right -
-        element.getBoundingClientRect().right;
-    if (keys.right.pressed && rightBound > 0.5 && !keys.left.pressed) {
-        placeRight();
-    }
-    if (keys.left.pressed && leftBound > 0.5 && !keys.right.pressed) {
-        placeLeft();
-    }
-    if (keys.up.pressed) {
-        up();
-    }
-    if (keys.down.pressed) {
-        down();
-    }
+    if (!paused) {
+        const leftBound =
+            element.getBoundingClientRect().left -
+            gameScreen.getBoundingClientRect().left;
+        const rightBound =
+            gameScreen.getBoundingClientRect().right -
+            element.getBoundingClientRect().right;
 
-    if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
-        jump();
-        keys.jump.switch = true;
+        if (
+            keys.jump.pressed &&
+            !keys.jump.switch &&
+            !keys.jump.spam &&
+            (keys.right.pressed || keys.left.pressed)
+        ) {
+            if (keys.left.pressed) {
+                jump(3);
+            } else if (keys.right.pressed) {
+                jump(-3);
+            }
+            keys.jump.switch = true;
+        }
+
+        if (
+            keys.right.pressed &&
+            rightBound > 0.5 &&
+            !keys.left.pressed &&
+            !keys.jump.spam
+        ) {
+            placeRight();
+        }
+        if (
+            keys.left.pressed &&
+            leftBound > 0.5 &&
+            !keys.right.pressed &&
+            !keys.jump.spam
+        ) {
+            placeLeft();
+        }
+        if (keys.up.pressed) {
+            up();
+        }
+        if (keys.down.pressed) {
+            down();
+        }
+        if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
+            jump();
+            keys.jump.switch = true;
+        }
+
+        moveBarrel();
     }
-    moveBarrel();
-}
     requestAnimationFrame(gameLoop);
 };
 export const main = () => {
@@ -541,7 +568,7 @@ export const main = () => {
             keys.jump.pressed = true;
         }
         if (e.key === 'p') {
-            togglePauseMenu()
+            togglePauseMenu();
         }
     });
     addEventListener('keyup', ({ key }) => {
