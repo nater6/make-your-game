@@ -45,7 +45,6 @@ const keys = {
     },
 };
 let paused = false;
-let jumpSpam = false;
 
 const getBoundTop = (ind) =>
     document.getElementById(ind).getBoundingClientRect().top;
@@ -342,8 +341,7 @@ function newBarrel() {
     barrel.append(barrelImg);
     barrel.setAttribute('class', 'barrel');
     //Get the HTMLelement of the top stage crane
-    
-    
+
     //Put the barrel next to donkey kong
 
     barrel.style.left = `${bounds.right - (bounds.right - bounds.left)}px`;
@@ -366,7 +364,7 @@ function barrelDrop(divCenter, divTop) {
             (div.getBoundingClientRect().right +
                 div.getBoundingClientRect().left) /
             2;
-            let currentLevel = CurrentLevel(divTop)
+        let currentLevel = CurrentLevel(divTop);
         if (
             CurrentLevel(div.getBoundingClientRect().bottom) ===
             currentLevel - 1
@@ -412,7 +410,7 @@ function moveBarrel() {
 
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
-        let currentLevelt = CurrentLevel(thisBarrel.top)
+        let currentLevelt = CurrentLevel(thisBarrel.top);
         const XdistMoved =
             ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
         const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
@@ -423,7 +421,6 @@ function moveBarrel() {
         if (barrelDrop(tbCenter, thisBarrel.top)) {
             // console.log('DROP HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1')
             let yMove = (dBetweenStages / window.innerHeight) * 100;
-           
             switch (currentLevelt) {
                 case 5:
                     yMove *= 2;
@@ -451,26 +448,21 @@ function moveBarrel() {
             // console.log('BLACKDIV ====', barrelDrop(tbCenter, thisBarrel.top));
             // console.log('BarrelLevel', CurrentLevel(thisBarrel.top));
             let yMove;
-
             switch (currentLevelt) {
                 case 6:
                     yMove = 0;
                     break;
                 case 4:
                     yMove = ((dBetweenStages * 2) / window.innerHeight) * 100;
-
                     break;
                 case 2:
                     yMove = ((dBetweenStages * 4) / window.innerHeight) * 100;
-
                     break;
                 case 0:
                     yMove = ((dBetweenStages * 6) / window.innerHeight) * 100;
-
                     break;
             }
             // console.log('YMOVE=====', yMove);
-
             indBarrel.style.transform = `translate(${
                 XdistMoved + 0.1
             }vw, ${yMove}vh)`;
@@ -505,23 +497,17 @@ function moveBarrel() {
         }
     });
 }
-const MinutesAndSeconds = (millis) => {
-    let minutes = Math.floor(millis / 60);
-    let min = 0;
-    if (minutes > 60) {
-        min = Math.floor(minutes / 60);
-        minutes = Math.floor(minutes - min * 60);
-        console.log(minutes);
-    }
-    let seconds = Math.floor(millis % 60);
-    //ES6 interpolated literals/template literals
-    //If seconds is less than 10 put a zero in front.
-    return `${min < 10 ? '0' : ''}${min}:${minutes < 10 ? '0' : ''}${minutes}:${
-        seconds < 10 ? '0' : ''
-    }${seconds}`;
-};
+function msToTime(duration) {
+    let milliseconds = parseInt((duration % 1000) / 100),
+        seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60);
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    milliseconds = milliseconds < 10 ? '0' + milliseconds : milliseconds;
+    return minutes + ':' + seconds + ':' + milliseconds;
+} 
 // console.log(rightBound);
-const gameLoop = () => {
+const gameLoop = (time) => {
     if (!paused) {
         leftBound =
             element.getBoundingClientRect().left -
@@ -529,7 +515,6 @@ const gameLoop = () => {
         rightBound =
             gameScreen.getBoundingClientRect().right -
             element.getBoundingClientRect().right;
-
         if (
             keys.jump.pressed &&
             !keys.jump.switch &&
@@ -543,7 +528,6 @@ const gameLoop = () => {
             }
             keys.jump.switch = true;
         }
-
         if (
             keys.right.pressed &&
             rightBound > 0.5 &&
@@ -571,8 +555,8 @@ const gameLoop = () => {
             keys.jump.switch = true;
         }
         moveBarrel();
-        console.log(MinutesAndSeconds(gameFrame));
-        timerId.innerText = MinutesAndSeconds(gameFrame);
+        // console.log(MinutesAndSeconds(gameFrame));
+        timerId.innerText = msToTime(time);
         gameFrame++;
     }
     requestAnimationFrame(gameLoop);
