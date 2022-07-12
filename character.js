@@ -316,11 +316,12 @@ function up() {
 function down() {
     top = parseInt(element.getBoundingClientRect().top);
     if (OnLadder(element.getBoundingClientRect(), CurrentLevel(top + 10), 10)) {
-        currentY =
+        currentY = Math.round(
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
-            100;
-        currentY < 0 ? 0 : (currentY -= 0.5);
+                100
+        );
+        currentY < 0 ? 0 : (currentY -= 1);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -440,14 +441,14 @@ function barrelDrop(divCenter, divTop) {
                 currentLevel === 2 ||
                 currentLevel === 0
             ) {
-                if (blackDivCenter < divCenter) result = true;
+                if (blackDivCenter < divCenter + 20) result = true;
             }
             if (
                 currentLevel === 5 ||
                 currentLevel === 3 ||
                 currentLevel === 1
             ) {
-                if (blackDivCenter > divCenter) result = true;
+                if (blackDivCenter > divCenter - 20) result = true;
             }
         }
     });
@@ -483,7 +484,7 @@ function moveBarrel() {
         if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
             indBarrel.remove();
         }
-        console.log(barrelPass(thisBarrel, indBarrel));
+        // console.log(barrelPass(thisBarrel, indBarrel));
         if (barrelPass(thisBarrel, indBarrel) === 'score') {
             document.querySelector('#score-Id').innerHTML =
                 +document.querySelector('#score-Id').innerHTML + 100;
@@ -559,17 +560,58 @@ function moveBarrel() {
         }
     });
 }
-// const characterDrop = () => {
-//     // currBarrel.forEach((indBarrel) => {
-//     const thisBarrel = element.getBoundingClientRect();
-//     let currentLevelt = CurrentLevel(thisBarrel.top);
-//     // const XdistMoved =
-//     //     ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
-//     const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
-//     if (barrelDrop(tbCenter, thisBarrel.top)) {
-//         console.log('hello', element.style.transform);
-//     }
-// };
+const characterDrop = () => {
+    // const currBarrel = document.querySelectorAll('.barrel');
+    // currBarrel.forEach((indBarrel) => {
+    // const thisBarrel = element.getBoundingClientRect();
+    let currentLevelt = CurrentLevel(element.getBoundingClientRect().top);
+    const XdistMoved =
+        ((element.getBoundingClientRect().left -
+            gameScreen.getBoundingClientRect().left) /
+            window.innerWidth) *
+        100;
+    const tbCenter =
+        (element.getBoundingClientRect().right +
+            element.getBoundingClientRect().left) /
+        2;
+    //If the barrel is at the end remove it
+    // if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
+    //     indBarrel.remove();
+    // }
+    // console.log(currentLevelt)
+    if (barrelDrop(tbCenter, element.getBoundingClientRect().top)) {
+        currentY = (dBetweenStages / window.innerHeight) * 100;
+        // console.log('top', yMove);
+        switch (currentLevelt) {
+            case 6:
+                currentY *= 5;
+                break;
+            case 5:
+                currentY *= 4;
+                break;
+            case 4:
+                currentY *= 3;
+                break;
+            case 3:
+                currentY *= 2;
+                break;
+            case 2:
+                currentY *= 1;
+                break;
+            case 1:
+                currentY *= 0;
+                break;
+        }
+        // console.log('Bottom', currentY);
+        // console.log('characterbefore', element.style.transform);
+        // element.style.transform = `translate(${-currentX}vw,${
+        //     currentY + 0.1
+        // }vh)`;
+        death = true;
+        // console.log('characterafter', element.style.transform);
+    }
+    // });
+};
 function msToTime(duration) {
     let milliseconds = parseInt((duration % 1000) / 100),
         seconds = Math.floor((duration / 1000) % 60),
@@ -628,7 +670,7 @@ const gameLoop = (time) => {
             keys.jump.switch = true;
         }
         // characterDrop();
-        moveBarrel();
+        // moveBarrel();
 
         // console.log(MinutesAndSeconds(gameFrame));
         timerId.innerText = msToTime(time);
@@ -638,9 +680,13 @@ const gameLoop = (time) => {
 export const main = () => {
     addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
+            characterDrop();
+            console.log('right', 'currentX', currentX, 'currentY', currentY);
             keys.right.pressed = true;
         }
         if (e.key === 'ArrowLeft') {
+            characterDrop();
+            console.log('left', 'currentX', currentX, 'currentY', currentY);
             keys.left.pressed = true;
         }
         if (e.key === 'ArrowUp') {
