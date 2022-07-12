@@ -179,17 +179,25 @@
                 </div>
             </div>
         </div>
+        <div class="GameOver">
+            <div class="gameover_content">
+                <h1>Game Over</h1>
+                <div>Timer: <span id="timer-Id-GO">00:00</span></div>
+            <div>Score: <span id="score-Id-GO">0</span></div>
+            </div>
+        </div>
 
         <div class="scoring">
             <div>Timer: <span id="timer-Id">00:00</span></div>
             <div>Score: <span id="score-Id">0</span></div>
-            <div>Lives: <span id="lives-Id">3</span></div>
+            <div>Lives: <span id="lives-Id"></span></div>
         </div>
         <div class="pausedMenu">
             <div class="content">
                 <h1>PAUSED</h1>
             </div>
         </div>
+    
         <script type="module">
             import { main } from './character.js';
             main();
