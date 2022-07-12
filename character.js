@@ -2,7 +2,6 @@ const startingX = document.querySelector('#box').getBoundingClientRect().left;
 const startingY = document.querySelector('#box').getBoundingClientRect().top;
 let currentX = 0;
 let currentY = 0;
-
 let ladder_1 = document.getElementById('ladder_1').getBoundingClientRect();
 let ladder_2 = document.getElementById('ladder_2').getBoundingClientRect();
 let ladder_3 = document.getElementById('ladder_3').getBoundingClientRect();
@@ -319,8 +318,8 @@ function down() {
         currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
-                100;
-        currentY < 0 ? currentY = 0 : (currentY -= 0.25);
+            100;
+        currentY < 0 ? (currentY = 0) : (currentY -= 0.25);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -342,9 +341,7 @@ function newBarrel() {
     barrel.setAttribute('data-passed', 'false');
     barrel.setAttribute('class', 'barrel');
     //Get the HTMLelement of the top stage crane
-
     //Put the barrel next to donkey kong
-
     barrel.style.left = `${bounds.right - (bounds.right - bounds.left)}px`;
     barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
     bottomStages.insertBefore(barrel, topPlatform);
@@ -365,7 +362,6 @@ function barrelPass(barrel, indBarrel) {
     }
     //Check if the bounds of the barrel overlap with the bouns of the character(If they do return "dead")
     //Check if the left and right of the barrel are inside the characters div => if they are check the bottom of the character is less than the top of the barrel
-
     if (
         barrel.x < charBounds.x + charBounds.width &&
         barrel.x + barrel.width > charBounds.x &&
@@ -374,8 +370,6 @@ function barrelPass(barrel, indBarrel) {
     ) {
         return 'collision';
     }
-
-    // console.log(indBarrel.getAttribute("data-passed"));
     if (
         CurrentLevel(barrel.top) ===
         CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
@@ -462,7 +456,6 @@ function togglePauseMenu() {
         pausedMenu.style.display = 'none';
     }
 }
-
 let newB = 0;
 function moveBarrel() {
     newB++;
@@ -472,7 +465,6 @@ function moveBarrel() {
     }
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
-
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
         let currentLevelt = CurrentLevel(thisBarrel.top);
@@ -483,14 +475,12 @@ function moveBarrel() {
         if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
             indBarrel.remove();
         }
-        // console.log(barrelPass(thisBarrel, indBarrel));
         if (barrelPass(thisBarrel, indBarrel) === 'score') {
             document.querySelector('#score-Id').innerHTML =
                 +document.querySelector('#score-Id').innerHTML + 100;
         } else if (barrelPass(thisBarrel, indBarrel) === 'collision') {
             death = true;
         }
-
         if (barrelDrop(tbCenter, thisBarrel.top)) {
             let yMove = (dBetweenStages / window.innerHeight) * 100;
             switch (currentLevelt) {
@@ -544,7 +534,6 @@ function moveBarrel() {
             switch (currentLevelt) {
                 case 5:
                     yMove = (dBetweenStages / window.innerHeight) * 100;
-
                     break;
                 case 3:
                     yMove = ((dBetweenStages * 3) / window.innerHeight) * 100;
@@ -560,27 +549,14 @@ function moveBarrel() {
     });
 }
 const characterDrop = () => {
-    // const currBarrel = document.querySelectorAll('.barrel');
-    // currBarrel.forEach((indBarrel) => {
-    // const thisBarrel = element.getBoundingClientRect();
     let currentLevelt = CurrentLevel(element.getBoundingClientRect().top);
-    const XdistMoved =
-        ((element.getBoundingClientRect().left -
-            gameScreen.getBoundingClientRect().left) /
-            window.innerWidth) *
-        100;
     const tbCenter =
         (element.getBoundingClientRect().right +
             element.getBoundingClientRect().left) /
         2;
     //If the barrel is at the end remove it
-    // if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
-    //     indBarrel.remove();
-    // }
-    // console.log(currentLevelt)
     if (barrelDrop(tbCenter, element.getBoundingClientRect().top)) {
         currentY = (dBetweenStages / window.innerHeight) * 100;
-        // console.log('top', yMove);
         switch (currentLevelt) {
             case 6:
                 currentY *= 5;
@@ -601,22 +577,15 @@ const characterDrop = () => {
                 currentY = 0.5;
                 break;
         }
-        // console.log('Bottom', currentY);
-        // console.log('characterbefore', element.style.transform);
-        element.style.transform = `translate(${-currentX}vw,${
-            -currentY
-            }vh)`;
+        element.style.transform = `translate(${-currentX}vw,${-currentY}vh)`;
         top = parseInt(element.getBoundingClientRect().top);
-         currentY =
-             ((startingY - element.getBoundingClientRect().top) /
-                 window.innerHeight) *
-             100;
-         currentY < 0 ? (currentY = 0) : (currentY -= 0.25);
-         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
-        // death = true;
-        // console.log('characterafter', element.style.transform);
+        currentY =
+            ((startingY - element.getBoundingClientRect().top) /
+                window.innerHeight) *
+            100;
+        currentY += 0.25;
+        element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
-    // });
 };
 function msToTime(duration) {
     let milliseconds = parseInt((duration % 1000) / 100),
@@ -627,7 +596,6 @@ function msToTime(duration) {
     milliseconds = milliseconds < 10 ? '0' + milliseconds : milliseconds;
     return minutes + ':' + seconds + ':' + milliseconds;
 }
-// console.log(rightBound);
 const gameLoop = (time) => {
     if (!paused && !death) {
         leftBound =
@@ -675,10 +643,8 @@ const gameLoop = (time) => {
             jump(0, time);
             keys.jump.switch = true;
         }
-        // characterDrop();
-        // moveBarrel();
-
-        // console.log(MinutesAndSeconds(gameFrame));
+        characterDrop();
+        moveBarrel();
         timerId.innerText = msToTime(time);
     }
     requestAnimationFrame(gameLoop);
@@ -686,13 +652,11 @@ const gameLoop = (time) => {
 export const main = () => {
     addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
-            characterDrop();
-            // console.log('right', 'currentX', currentX, 'currentY', currentY);
+            // characterDrop();
             keys.right.pressed = true;
         }
         if (e.key === 'ArrowLeft') {
-            characterDrop();
-            // console.log('left', 'currentX', currentX, 'currentY', currentY);
+            // characterDrop();
             keys.left.pressed = true;
         }
         if (e.key === 'ArrowUp') {
