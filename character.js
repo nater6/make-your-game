@@ -47,6 +47,7 @@ const keys = {
     },
 };
 let paused = false;
+let death = false
 
 const getBoundTop = (ind) =>
     document.getElementById(ind).getBoundingClientRect().top;
@@ -351,36 +352,59 @@ function newBarrel() {
     initialPos = barrel.getBoundingClientRect();
 }
 
+
 function barrelPass(barrel, indBarrel) {
     const charBounds = element.getBoundingClientRect();
     const passed = indBarrel.getAttribute('data-passed');
+    function pointChecker() {
+        if (passed === 'true') {
+            indBarrel.setAttribute('data-passed', 'scored');
+            return "score";
+        } else if (passed === 'false') {
+            indBarrel.setAttribute('data-passed', 'true');
+        }
+    }
     //Check if the bounds of the barrel overlap with the bouns of the character(If they do return "dead")
     //Check if the left and right of the barrel are inside the characters div => if they are check the bottom of the character is less than the top of the barrel
 
-    // console.log(passed, CurrentLevel(barrel.top));
+    if (barrel.x < charBounds.x + charBounds.width &&
+        barrel.x + barrel.width > charBounds.x &&
+        barrel.y < charBounds.y + charBounds.height &&
+        barrel.y + barrel.height > charBounds.y
+    ) {
+        return "collision"
+        }
+
+    // console.log(indBarrel.getAttribute("data-passed"));
     if (
         CurrentLevel(barrel.top) ===
         CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
     ) {
         //Check if the left of the barrel is passed the right of the barrel && data-passed === "true" (if so return "score" and set data-passed back to false)
         if ([6, 4, 2, 0].includes(CurrentLevel(barrel.top))) {
-            if (charBounds.right < barrel.left) {
-                if (passed === 'true') {
-                    indBarrel.setAttribute('data-passed', 'scored');
-                    return 'score';
-                } else if (passed === 'false') {
-                    indBarrel.setAttribute('data-passed', 'true');
-                }
+            if (
+                charBounds.right < barrel.left &&
+                !OnLadder(charBounds, CurrentLevel(charBounds.top))
+            ) {
+                return pointChecker();
+            } else if (
+                charBounds.right < barrel.left &&
+                OnLadder(charBounds, CurrentLevel(charBounds.top))
+            ) {
+                indBarrel.setAttribute('data-passed', 'onLadder');
             }
         }
         if ([5, 3, 1].includes(CurrentLevel(barrel.top))) {
-            if (charBounds.left > barrel.right) {
-                if (passed === 'true') {
-                    indBarrel.setAttribute('data-passed', 'scored');
-                    return 'score';
-                } else if (passed === 'false') {
-                    indBarrel.setAttribute('data-passed', 'true');
-                }
+            if (
+                charBounds.left > barrel.right &&
+                !OnLadder(charBounds, CurrentLevel(charBounds.top))
+            ) {
+                return pointChecker();
+            } else if (
+                charBounds.right < barrel.left &&
+                OnLadder(charBounds, CurrentLevel(charBounds.top))
+            ) {
+                indBarrel.setAttribute('data-passed', 'onLadder');
             }
         }
     }
@@ -388,7 +412,8 @@ function barrelPass(barrel, indBarrel) {
         CurrentLevel(barrel.top) !==
         CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
     ) {
-        if (passed === 'scored') indBarrel.setAttribute('data-passed', 'false');
+        if (passed === 'onLadder')
+            indBarrel.setAttribute('data-passed', 'false');
     }
 }
 
@@ -439,94 +464,105 @@ function togglePauseMenu() {
 }
 
 let newB = 0;
-function moveBarrel(time) {
-    newB++;
-    if (newB === 5000) {
-        newBarrel();
-        newB = 0;
-    }
-    //Get the barrel as an element
-    const currBarrel = document.querySelectorAll('.barrel');
-    currBarrel.forEach((indBarrel) => {
-        const thisBarrel = indBarrel.getBoundingClientRect();
-        let currentLevelt = CurrentLevel(thisBarrel.top);
-        const XdistMoved =
-            ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
-        const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
-        //If the barrel is at the end remove it
-        if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
-            indBarrel.remove();
+function moveBarrel() {
+    
+        newB++;
+        if (newB === 500) {
+            newBarrel();
+            newB = 0;
         }
-        if (barrelDrop(tbCenter, thisBarrel.top)) {
-            let yMove = (dBetweenStages / window.innerHeight) * 100;
-            switch (currentLevelt) {
-                case 5:
-                    yMove *= 2;
-                    break;
-                case 4:
-                    yMove *= 3;
-                    break;
-                case 3:
-                    yMove *= 4;
-                    break;
-                case 2:
-                    yMove *= 5;
-                    break;
-                case 1:
-                    yMove *= 6;
-                    break;
+        //Get the barrel as an element
+        const currBarrel = document.querySelectorAll('.barrel');
+
+        currBarrel.forEach((indBarrel) => {
+            const thisBarrel = indBarrel.getBoundingClientRect();
+            let currentLevelt = CurrentLevel(thisBarrel.top);
+            const XdistMoved =
+                ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
+            const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
+            //If the barrel is at the end remove it
+            if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
+                indBarrel.remove();
             }
-            indBarrel.style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
-        } else if (
-            currentLevelt === 6 ||
-            currentLevelt === 4 ||
-            currentLevelt === 2 ||
-            currentLevelt === 0
-        ) {
-            let yMove;
-            switch (currentLevelt) {
-                case 6:
-                    yMove = 0;
-                    break;
-                case 4:
-                    yMove = ((dBetweenStages * 2) / window.innerHeight) * 100;
-                    break;
-                case 2:
-                    yMove = ((dBetweenStages * 4) / window.innerHeight) * 100;
-                    break;
-                case 0:
-                    yMove = ((dBetweenStages * 6) / window.innerHeight) * 100;
-                    break;
+            console.log(barrelPass(thisBarrel, indBarrel));
+            if (barrelPass(thisBarrel, indBarrel) === 'score') {
+                document.querySelector('#score-Id').innerHTML =
+                    +document.querySelector('#score-Id').innerHTML + 100;
+            } else if (barrelPass(thisBarrel, indBarrel) === "collision") {
+                death = true
             }
-            indBarrel.style.transform = `translate(${
-                XdistMoved + 0.2
-            }vw, ${yMove}vh)`;
-        } else if (
-            currentLevelt === 5 ||
-            currentLevelt === 3 ||
-            currentLevelt === 1
-        ) {
-            let yMove;
-            // console.log(
-            //     'current Level=====================================================',
-            //     CurrentLevel(thisBarrel.top)
-            // );
-            switch (currentLevelt) {
-                case 5:
-                    yMove = (dBetweenStages / window.innerHeight) * 100;
-                    break;
-                case 3:
-                    yMove = ((dBetweenStages * 3) / window.innerHeight) * 100;
-                    break;
-                case 1:
-                    yMove = ((dBetweenStages * 5) / window.innerHeight) * 100;
-                    break;
+    
+            if (barrelDrop(tbCenter, thisBarrel.top)) {
+                let yMove = (dBetweenStages / window.innerHeight) * 100;
+                switch (currentLevelt) {
+                    case 5:
+                        yMove *= 2;
+                        break;
+                    case 4:
+                        yMove *= 3;
+                        break;
+                    case 3:
+                        yMove *= 4;
+                        break;
+                    case 2:
+                        yMove *= 5;
+                        break;
+                    case 1:
+                        yMove *= 6;
+                        break;
+                }
+                indBarrel.style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
+            } else if (
+                currentLevelt === 6 ||
+                currentLevelt === 4 ||
+                currentLevelt === 2 ||
+                currentLevelt === 0
+            ) {
+                let yMove;
+                switch (currentLevelt) {
+                    case 6:
+                        yMove = 0;
+                        break;
+                    case 4:
+                        yMove =
+                            ((dBetweenStages * 2) / window.innerHeight) * 100;
+                        break;
+                    case 2:
+                        yMove =
+                            ((dBetweenStages * 4) / window.innerHeight) * 100;
+                        break;
+                    case 0:
+                        yMove =
+                            ((dBetweenStages * 6) / window.innerHeight) * 100;
+                        break;
+                }
+                indBarrel.style.transform = `translate(${XdistMoved + 0.2
+                    }vw, ${yMove}vh)`;
+            } else if (
+                currentLevelt === 5 ||
+                currentLevelt === 3 ||
+                currentLevelt === 1
+            ) {
+                let yMove;
+                switch (currentLevelt) {
+                    case 5:
+                        yMove = (dBetweenStages / window.innerHeight) * 100;
+
+                        break;
+                    case 3:
+                        yMove =
+                            ((dBetweenStages * 3) / window.innerHeight) * 100;
+                        break;
+                    case 1:
+                        yMove =
+                            ((dBetweenStages * 5) / window.innerHeight) * 100;
+                        break;
+                }
+                indBarrel.style.transform = `translate(${XdistMoved - 0.2
+                    }vw, ${yMove}vh)`;
             }
-            indBarrel.style.transform = `translate(${
-                XdistMoved - 0.2
-            }vw, ${yMove}vh)`;
-        }
-    });
+        });
+    
 }
 // const characterDrop = () => {
 //     // currBarrel.forEach((indBarrel) => {
@@ -550,7 +586,7 @@ function msToTime(duration) {
 }
 // console.log(rightBound);
 const gameLoop = (time) => {
-    if (!paused) {
+    if (!paused && !death) {
         leftBound =
             element.getBoundingClientRect().left -
             gameScreen.getBoundingClientRect().left;
