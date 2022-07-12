@@ -10,10 +10,13 @@ let ladder_4 = document.getElementById('ladder_4').getBoundingClientRect();
 let ladder_5 = document.getElementById('ladder_5').getBoundingClientRect();
 let ladder_6 = document.getElementById('ladder_6').getBoundingClientRect();
 let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
-
+// let ArrayOfStage = Array.from(document.querySelectorAll('.stage'));
+// console.log(ArrayOfStage[7].getBoundingClientRect().top);
 let element = document.getElementById('box');
+element.style.position = 'absolute';
 let timerId = document.getElementById('timer-Id');
 const gameScreen = document.querySelector('.gameScreen');
+let top = parseInt(element.getBoundingClientRect().top);
 
 let leftBound;
 let rightBound;
@@ -249,9 +252,8 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
 };
 //Move Left
 function placeLeft() {
-    let top = parseInt(element.getBoundingClientRect().top);
+    // top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
-        element.style.position = 'absolute';
         currentX =
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
@@ -263,9 +265,9 @@ function placeLeft() {
 
 // Move Right
 function placeRight() {
-    let top = parseInt(element.getBoundingClientRect().top);
+    // top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
-        element.style.position = 'absolute';
+        // element.style.position = 'absolute';
         currentX =
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
@@ -276,7 +278,7 @@ function placeRight() {
 }
 
 function jump(direction = 0) {
-    let top = parseInt(element.getBoundingClientRect().top);
+    top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
         if (rightBound > 0.5 && leftBound > 0.5) {
             currentX = currentX + direction;
@@ -284,7 +286,6 @@ function jump(direction = 0) {
         element.style.transform = `translate(-${currentX}vw, -${
             currentY + 8
         }vh)`;
-
         keys.jump.spam = true;
         function down() {
             currentX = currentX + direction;
@@ -298,11 +299,10 @@ function jump(direction = 0) {
 }
 
 function up() {
-    let top = parseInt(element.getBoundingClientRect().top);
+    top = parseInt(element.getBoundingClientRect().top);
     if (
         OnLadder(element.getBoundingClientRect(), CurrentLevel(top - 10), 0, 10)
     ) {
-        element.style.position = 'absolute';
         currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
@@ -313,9 +313,8 @@ function up() {
 }
 
 function down() {
-    let top = parseInt(element.getBoundingClientRect().top);
+    top = parseInt(element.getBoundingClientRect().top);
     if (OnLadder(element.getBoundingClientRect(), CurrentLevel(top + 10), 10)) {
-        element.style.position = 'absolute';
         currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
@@ -440,15 +439,14 @@ function togglePauseMenu() {
 }
 
 let newB = 0;
-function moveBarrel() {
+function moveBarrel(time) {
     newB++;
-    if (newB === 500) {
+    if (newB === 5000) {
         newBarrel();
         newB = 0;
     }
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
-
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
         let currentLevelt = CurrentLevel(thisBarrel.top);
@@ -516,7 +514,6 @@ function moveBarrel() {
             switch (currentLevelt) {
                 case 5:
                     yMove = (dBetweenStages / window.innerHeight) * 100;
-
                     break;
                 case 3:
                     yMove = ((dBetweenStages * 3) / window.innerHeight) * 100;
@@ -531,6 +528,17 @@ function moveBarrel() {
         }
     });
 }
+// const characterDrop = () => {
+//     // currBarrel.forEach((indBarrel) => {
+//     const thisBarrel = element.getBoundingClientRect();
+//     let currentLevelt = CurrentLevel(thisBarrel.top);
+//     // const XdistMoved =
+//     //     ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
+//     const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
+//     if (barrelDrop(tbCenter, thisBarrel.top)) {
+//         console.log('hello', element.style.transform);
+//     }
+// };
 function msToTime(duration) {
     let milliseconds = parseInt((duration % 1000) / 100),
         seconds = Math.floor((duration / 1000) % 60),
@@ -556,9 +564,9 @@ const gameLoop = (time) => {
             (keys.right.pressed || keys.left.pressed)
         ) {
             if (keys.left.pressed && leftBound > 63) {
-                jump(2);
+                jump(2, time);
             } else if (keys.right.pressed && rightBound > 6) {
-                jump(-2);
+                jump(-2, time);
             }
             keys.jump.switch = true;
         }
@@ -585,10 +593,12 @@ const gameLoop = (time) => {
             down();
         }
         if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
-            jump();
+            jump(0, time);
             keys.jump.switch = true;
         }
+        // characterDrop();
         moveBarrel();
+
         // console.log(MinutesAndSeconds(gameFrame));
         timerId.innerText = msToTime(time);
     }
