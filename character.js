@@ -316,12 +316,11 @@ function up() {
 function down() {
     top = parseInt(element.getBoundingClientRect().top);
     if (OnLadder(element.getBoundingClientRect(), CurrentLevel(top + 10), 10)) {
-        currentY = Math.round(
+        currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
-                100
-        );
-        currentY < 0 ? 0 : (currentY -= 1);
+                100;
+        currentY < 0 ? currentY = 0 : (currentY -= 0.25);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -599,15 +598,22 @@ const characterDrop = () => {
                 currentY *= 1;
                 break;
             case 1:
-                currentY *= 0;
+                currentY = 0.5;
                 break;
         }
         // console.log('Bottom', currentY);
         // console.log('characterbefore', element.style.transform);
-        // element.style.transform = `translate(${-currentX}vw,${
-        //     currentY + 0.1
-        // }vh)`;
-        death = true;
+        element.style.transform = `translate(${-currentX}vw,${
+            -currentY
+            }vh)`;
+        top = parseInt(element.getBoundingClientRect().top);
+         currentY =
+             ((startingY - element.getBoundingClientRect().top) /
+                 window.innerHeight) *
+             100;
+         currentY < 0 ? (currentY = 0) : (currentY -= 0.25);
+         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+        // death = true;
         // console.log('characterafter', element.style.transform);
     }
     // });
@@ -681,12 +687,12 @@ export const main = () => {
     addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
             characterDrop();
-            console.log('right', 'currentX', currentX, 'currentY', currentY);
+            // console.log('right', 'currentX', currentX, 'currentY', currentY);
             keys.right.pressed = true;
         }
         if (e.key === 'ArrowLeft') {
             characterDrop();
-            console.log('left', 'currentX', currentX, 'currentY', currentY);
+            // console.log('left', 'currentX', currentX, 'currentY', currentY);
             keys.left.pressed = true;
         }
         if (e.key === 'ArrowUp') {
