@@ -14,6 +14,7 @@ let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
 let element = document.getElementById('box');
 element.style.position = 'absolute';
 let timerId = document.getElementById('timer-Id');
+let barrelTimer = 0;
 const gameScreen = document.querySelector('.gameScreen');
 let top = parseInt(element.getBoundingClientRect().top);
 
@@ -456,13 +457,12 @@ function togglePauseMenu() {
         pausedMenu.style.display = 'none';
     }
 }
-let newB = 0;
+// let newB = 0;
 function moveBarrel() {
-    newB++;
-    if (newB === 500) {
-        newBarrel();
-        newB = 0;
-    }
+    // newB++;
+    // if (barrelTimer) {
+    //     newBarrel();
+    // }
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
     currBarrel.forEach((indBarrel) => {
@@ -646,6 +646,13 @@ const gameLoop = (time) => {
         characterDrop();
         moveBarrel();
         timerId.innerText = msToTime(time);
+        if (barrelTimer == 250) {
+            console.log('hello');
+            newBarrel();
+            barrelTimer = 0;
+        } else {
+            barrelTimer++;
+        }
     }
     requestAnimationFrame(gameLoop);
 };
