@@ -458,7 +458,7 @@ let newB = 0;
 function moveBarrel() {
     newB++;
     if (newB === 500) {
-        // newBarrel();
+        newBarrel();
         newB = 0;
     }
     //Get the barrel as an element
