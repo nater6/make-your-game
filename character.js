@@ -5,7 +5,7 @@ let currentY = 0;
 let livesText = document.getElementById('lives-Id'),
     lives = 1;
 livesText.innerText = lives;
-let globalTime = 0
+let globalTime = 0;
 
 let ladder_1 = document.getElementById('ladder_1').getBoundingClientRect();
 let ladder_2 = document.getElementById('ladder_2').getBoundingClientRect();
@@ -14,7 +14,7 @@ let ladder_4 = document.getElementById('ladder_4').getBoundingClientRect();
 let ladder_5 = document.getElementById('ladder_5').getBoundingClientRect();
 let ladder_6 = document.getElementById('ladder_6').getBoundingClientRect();
 let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
-let upperLadder = document.querySelectorAll(".upperstage .ladder")
+let upperLadder = document.querySelectorAll('.upperstage .ladder');
 let element = document.getElementById('box');
 element.style.position = 'absolute';
 let timerId = document.getElementById('timer-Id');
@@ -242,17 +242,18 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
         }
     }
     if (floor === 5 || floor === 6) {
-        if ((x_pos < ladder_7.left && x_pos > ladder_7.left - ladder_7.width)||
-        (x_pos < upperLadder[0].left && x_pos > upperLadder[0].left - upperLadder[0].width) ) {
-            if ((
-                x_pos < ladder_7.left &&
-                x_pos > ladder_7.left - ladder_7.width &&
-                ladder_7.y + -offset > object.bottom - 3
-            ) || (
-                x_pos < upperLadder[0].left &&
-                x_pos > upperLadder[0].left - upperLadder[0].width &&
-                upperLadder[0].y + -offset > object.bottom - 3
-            )
+        if (
+            (x_pos < ladder_7.left && x_pos > ladder_7.left - ladder_7.width) ||
+            (x_pos < upperLadder[0].left &&
+                x_pos > upperLadder[0].left - upperLadder[0].width)
+        ) {
+            if (
+                (x_pos < ladder_7.left &&
+                    x_pos > ladder_7.left - ladder_7.width &&
+                    ladder_7.y + -offset > object.bottom - 3) ||
+                (x_pos < upperLadder[0].left &&
+                    x_pos > upperLadder[0].left - upperLadder[0].width &&
+                    upperLadder[0].y + -offset > object.bottom - 3)
             ) {
                 return false;
             }
@@ -561,22 +562,21 @@ function moveBarrel() {
     }
 }
 
-
 let GameOverMenu = document.getElementsByClassName('GameOver')[0];
 function gameover() {
-    paused = true
-    document.getElementById("timer-Id-GO").innerText = timerId.innerText
-    document.getElementById("score-Id-GO").innerText = document.querySelector('#score-Id').innerHTML
+    paused = true;
+    document.getElementById('timer-Id-GO').innerText = timerId.innerText;
+    document.getElementById('score-Id-GO').innerText =
+        document.querySelector('#score-Id').innerHTML;
     GameOverMenu.style.display = 'block';
 
     setTimeout(() => {
         GameOverMenu.style.display = 'none';
-        paused = false
+        paused = false;
     }, 2000);
-    document.querySelector('#score-Id').innerHTML = 0
+    document.querySelector('#score-Id').innerHTML = 0;
     lives = 1;
     livesText.innerText = lives;
-    
 }
 
 // Reset the game if the character touch a barrel
@@ -591,11 +591,10 @@ function Reset() {
     if (lives === 0) {
         gameover();
     }
-    globalTime = globalTime - globalTime
+    globalTime = globalTime - globalTime;
     death = false;
     newBarrel();
 }
-
 
 const characterDrop = () => {
     let currentLevelt = CurrentLevel(element.getBoundingClientRect().top);
@@ -665,7 +664,7 @@ const timer = () => {
 timer();
 const gameLoop = (time) => {
     if (!paused && !death) {
-       // console.log(time);
+        // console.log(time);
         // if (Math.round(time) === 1000) {
         //     // console.log(time, '-------------');
         //     newBarrel();
@@ -776,6 +775,6 @@ export const main = () => {
             keys.paused.pressed = false;
         }
     });
-    newBarrel()
+    newBarrel();
     gameLoop();
 };
