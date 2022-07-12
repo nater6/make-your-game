@@ -9,18 +9,15 @@ let ladder_4 = document.getElementById('ladder_4').getBoundingClientRect();
 let ladder_5 = document.getElementById('ladder_5').getBoundingClientRect();
 let ladder_6 = document.getElementById('ladder_6').getBoundingClientRect();
 let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
-// let ArrayOfStage = Array.from(document.querySelectorAll('.stage'));
-// console.log(ArrayOfStage[7].getBoundingClientRect().top);
 let element = document.getElementById('box');
 element.style.position = 'absolute';
 let timerId = document.getElementById('timer-Id');
 let barrelTimer = 0;
 const gameScreen = document.querySelector('.gameScreen');
 let top = parseInt(element.getBoundingClientRect().top);
-
 let leftBound;
 let rightBound;
-
+let frame = 0;
 const keys = {
     jump: {
         pressed: false,
@@ -588,16 +585,40 @@ const characterDrop = () => {
     }
 };
 function msToTime(duration) {
-    let milliseconds = parseInt((duration % 1000) / 100),
-        seconds = Math.floor((duration / 1000) % 60),
-        minutes = Math.floor((duration / (1000 * 60)) % 60);
+    let seconds = duration,
+        minutes = Math.floor(duration / 60);
+    if (seconds > 59) {
+        seconds = seconds - minutes * 60;
+    }
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
-    milliseconds = milliseconds < 10 ? '0' + milliseconds : milliseconds;
-    return minutes + ':' + seconds + ':' + milliseconds;
+    // milliseconds = milliseconds < 10 ? '0' + milliseconds : milliseconds;
+    return minutes + ':' + seconds;
 }
+let lastTime = new Date().getTime();
+// let displayNode = document.getElementById('display*);
+let numSeconds = 0;
+let currentTime = new Date().getTime();
+const timer = () => {
+    requestAnimationFrame(timer);
+    if (!paused) {
+        currentTime = new Date().getTime();
+        if (currentTime - lastTime >= 1000) {
+            lastTime = currentTime;
+            numSeconds++;
+            timerId.innerText = msToTime(numSeconds);
+        }
+    }
+};
+timer();
 const gameLoop = (time) => {
     if (!paused && !death) {
+        console.log(time);
+        if (Math.round(time) === 1000) {
+            // console.log(time, '-------------');
+            newBarrel();
+            // moveBarrel();
+        }
         leftBound =
             element.getBoundingClientRect().left -
             gameScreen.getBoundingClientRect().left;
@@ -644,16 +665,19 @@ const gameLoop = (time) => {
             keys.jump.switch = true;
         }
         characterDrop();
-        moveBarrel();
-        timerId.innerText = msToTime(time);
+        // moveBarrel();
+        // timerId.innerText = msToTime(time);
         if (barrelTimer == 250) {
-            console.log('hello');
-            newBarrel();
+            // newBarrel();
             barrelTimer = 0;
         } else {
             barrelTimer++;
         }
+        // if (frame == 60) {
+        //     msToTime(time);
+        // }
     }
+    frame++;
     requestAnimationFrame(gameLoop);
 };
 export const main = () => {
@@ -700,6 +724,5 @@ export const main = () => {
             keys.paused.pressed = false;
         }
     });
-    newBarrel();
     gameLoop();
 };
