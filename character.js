@@ -16,12 +16,14 @@ let ladder_6 = document.getElementById('ladder_6').getBoundingClientRect();
 let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
 let upperLadder = document.querySelectorAll(".upperstage .ladder")
 let element = document.getElementById('box');
+element.style.position = 'absolute';
 let timerId = document.getElementById('timer-Id');
+let barrelTimer = 0;
 const gameScreen = document.querySelector('.gameScreen');
-
+let top = parseInt(element.getBoundingClientRect().top);
 let leftBound;
 let rightBound;
-
+let frame = 0;
 const keys = {
     jump: {
         pressed: false,
@@ -260,9 +262,8 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
 };
 //Move Left
 function placeLeft() {
-    let top = parseInt(element.getBoundingClientRect().top);
+    // top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
-        element.style.position = 'absolute';
         currentX =
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
@@ -274,9 +275,9 @@ function placeLeft() {
 
 // Move Right
 function placeRight() {
-    let top = parseInt(element.getBoundingClientRect().top);
+    // top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
-        element.style.position = 'absolute';
+        // element.style.position = 'absolute';
         currentX =
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
@@ -287,7 +288,7 @@ function placeRight() {
 }
 
 function jump(direction = 0) {
-    let top = parseInt(element.getBoundingClientRect().top);
+    top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
         if (rightBound > 0.5 && leftBound > 0.5) {
             currentX = currentX + direction;
@@ -295,7 +296,6 @@ function jump(direction = 0) {
         element.style.transform = `translate(-${currentX}vw, -${
             currentY + 8
         }vh)`;
-
         keys.jump.spam = true;
         function down() {
             currentX = currentX + direction;
@@ -309,11 +309,10 @@ function jump(direction = 0) {
 }
 
 function up() {
-    let top = parseInt(element.getBoundingClientRect().top);
+    top = parseInt(element.getBoundingClientRect().top);
     if (
         OnLadder(element.getBoundingClientRect(), CurrentLevel(top - 10), 0, 10)
     ) {
-        element.style.position = 'absolute';
         currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
@@ -324,14 +323,13 @@ function up() {
 }
 
 function down() {
-    let top = parseInt(element.getBoundingClientRect().top);
+    top = parseInt(element.getBoundingClientRect().top);
     if (OnLadder(element.getBoundingClientRect(), CurrentLevel(top + 10), 10)) {
-        element.style.position = 'absolute';
         currentY =
             ((startingY - element.getBoundingClientRect().top) /
                 window.innerHeight) *
             100;
-        currentY < 0 ? 0 : (currentY -= 0.5);
+        currentY < 0 ? (currentY = 0) : (currentY -= 0.25);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -353,9 +351,7 @@ function newBarrel() {
     barrel.setAttribute('data-passed', 'false');
     barrel.setAttribute('class', 'barrel');
     //Get the HTMLelement of the top stage crane
-
     //Put the barrel next to donkey kong
-
     barrel.style.left = `${bounds.right - (bounds.right - bounds.left)}px`;
     barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
     bottomStages.insertBefore(barrel, topPlatform);
@@ -376,7 +372,6 @@ function barrelPass(barrel, indBarrel) {
     }
     //Check if the bounds of the barrel overlap with the bouns of the character(If they do return "dead")
     //Check if the left and right of the barrel are inside the characters div => if they are check the bottom of the character is less than the top of the barrel
-
     if (
         barrel.x < charBounds.x + charBounds.width &&
         barrel.x + barrel.width > charBounds.x &&
@@ -385,8 +380,6 @@ function barrelPass(barrel, indBarrel) {
     ) {
         return 'collision';
     }
-
-    // console.log(indBarrel.getAttribute("data-passed"));
     if (
         CurrentLevel(barrel.top) ===
         CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
@@ -451,14 +444,14 @@ function barrelDrop(divCenter, divTop) {
                 currentLevel === 2 ||
                 currentLevel === 0
             ) {
-                if (blackDivCenter < divCenter) result = true;
+                if (blackDivCenter < divCenter + 20) result = true;
             }
             if (
                 currentLevel === 5 ||
                 currentLevel === 3 ||
                 currentLevel === 1
             ) {
-                if (blackDivCenter > divCenter) result = true;
+                if (blackDivCenter > divCenter - 20) result = true;
             }
         }
     });
@@ -473,17 +466,14 @@ function togglePauseMenu() {
         pausedMenu.style.display = 'none';
     }
 }
-
-let newB = 0;
+// let newB = 0;
 function moveBarrel() {
-    newB++;
-    if (newB === 500) {
-        newBarrel();
-        newB = 0;
-    }
+    // newB++;
+    // if (barrelTimer) {
+    //     newBarrel();
+    // }
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
-
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
         let currentLevelt = CurrentLevel(thisBarrel.top);
@@ -494,14 +484,12 @@ function moveBarrel() {
         if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
             indBarrel.remove();
         }
-        console.log(barrelPass(thisBarrel, indBarrel));
         if (barrelPass(thisBarrel, indBarrel) === 'score') {
             document.querySelector('#score-Id').innerHTML =
                 +document.querySelector('#score-Id').innerHTML + 100;
         } else if (barrelPass(thisBarrel, indBarrel) === 'collision') {
             death = true;
         }
-
         if (barrelDrop(tbCenter, thisBarrel.top)) {
             let yMove = (dBetweenStages / window.innerHeight) * 100;
             switch (currentLevelt) {
@@ -555,7 +543,6 @@ function moveBarrel() {
             switch (currentLevelt) {
                 case 5:
                     yMove = (dBetweenStages / window.innerHeight) * 100;
-
                     break;
                 case 3:
                     yMove = ((dBetweenStages * 3) / window.innerHeight) * 100;
@@ -609,18 +596,81 @@ function Reset() {
     newBarrel();
 }
 
+
+const characterDrop = () => {
+    let currentLevelt = CurrentLevel(element.getBoundingClientRect().top);
+    const tbCenter =
+        (element.getBoundingClientRect().right +
+            element.getBoundingClientRect().left) /
+        2;
+    //If the barrel is at the end remove it
+    if (barrelDrop(tbCenter, element.getBoundingClientRect().top)) {
+        currentY = (dBetweenStages / window.innerHeight) * 100;
+        switch (currentLevelt) {
+            case 6:
+                currentY *= 5;
+                break;
+            case 5:
+                currentY *= 4;
+                break;
+            case 4:
+                currentY *= 3;
+                break;
+            case 3:
+                currentY *= 2;
+                break;
+            case 2:
+                currentY *= 1;
+                break;
+            case 1:
+                currentY = 0.5;
+                break;
+        }
+        element.style.transform = `translate(${-currentX}vw,${-currentY}vh)`;
+        top = parseInt(element.getBoundingClientRect().top);
+        currentY =
+            ((startingY - element.getBoundingClientRect().top) /
+                window.innerHeight) *
+            100;
+        currentY += 0.25;
+        element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+    }
+};
 function msToTime(duration) {
-    let milliseconds = parseInt((duration % 1000) / 100),
-        seconds = Math.floor((duration / 1000) % 60),
-        minutes = Math.floor((duration / (1000 * 60)) % 60);
+    let seconds = duration,
+        minutes = Math.floor(duration / 60);
+    if (seconds > 59) {
+        seconds = seconds - minutes * 60;
+    }
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
-    milliseconds = milliseconds < 10 ? '0' + milliseconds : milliseconds;
-    return minutes + ':' + seconds + ':' + milliseconds;
+    // milliseconds = milliseconds < 10 ? '0' + milliseconds : milliseconds;
+    return minutes + ':' + seconds;
 }
-// console.log(rightBound);
+let lastTime = new Date().getTime();
+// let displayNode = document.getElementById('display*);
+let numSeconds = 0;
+let currentTime = new Date().getTime();
+const timer = () => {
+    requestAnimationFrame(timer);
+    if (!paused) {
+        currentTime = new Date().getTime();
+        if (currentTime - lastTime >= 1000) {
+            lastTime = currentTime;
+            numSeconds++;
+            timerId.innerText = msToTime(numSeconds);
+        }
+    }
+};
+timer();
 const gameLoop = (time) => {
     if (!paused && !death) {
+       // console.log(time);
+        // if (Math.round(time) === 1000) {
+        //     // console.log(time, '-------------');
+        //     newBarrel();
+        //     // moveBarrel();
+        // }
         leftBound =
             element.getBoundingClientRect().left -
             gameScreen.getBoundingClientRect().left;
@@ -634,9 +684,9 @@ const gameLoop = (time) => {
             (keys.right.pressed || keys.left.pressed)
         ) {
             if (keys.left.pressed && leftBound > 63) {
-                jump(2);
+                jump(2, time);
             } else if (keys.right.pressed && rightBound > 6) {
-                jump(-2);
+                jump(-2, time);
             }
             keys.jump.switch = true;
         }
@@ -663,23 +713,33 @@ const gameLoop = (time) => {
             down();
         }
         if (keys.jump.pressed && !keys.jump.switch && !keys.jump.spam) {
-            jump();
+            jump(0, time);
             keys.jump.switch = true;
         }
+        characterDrop();
         moveBarrel();
-        globalTime = time
-        timerId.innerText = msToTime(globalTime);
-        
+        // timerId.innerText = msToTime(time);
+        if (barrelTimer == 250) {
+            // newBarrel();
+            barrelTimer = 0;
+        } else {
+            barrelTimer++;
+        }
+        // if (frame == 60) {
+        //     msToTime(time);
+        // }
     }
-
+    frame++;
     requestAnimationFrame(gameLoop);
 };
 export const main = () => {
     addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
+            // characterDrop();
             keys.right.pressed = true;
         }
         if (e.key === 'ArrowLeft') {
+            // characterDrop();
             keys.left.pressed = true;
         }
         if (e.key === 'ArrowUp') {
@@ -716,6 +776,6 @@ export const main = () => {
             keys.paused.pressed = false;
         }
     });
-    newBarrel();
+    newBarrel()
     gameLoop();
 };
