@@ -466,7 +466,7 @@ function togglePauseMenu() {
 
 let newB = 0;
 function moveBarrel() {
-    if (!death) {
+    
         newB++;
         if (newB === 500) {
             newBarrel();
@@ -487,11 +487,9 @@ function moveBarrel() {
             }
             console.log(barrelPass(thisBarrel, indBarrel));
             if (barrelPass(thisBarrel, indBarrel) === 'score') {
-                console.log("POINTS")
                 document.querySelector('#score-Id').innerHTML =
                     +document.querySelector('#score-Id').innerHTML + 100;
             } else if (barrelPass(thisBarrel, indBarrel) === "collision") {
-                console.log("DEAD")
                 death = true
             }
     
@@ -565,9 +563,7 @@ function moveBarrel() {
                     }vw, ${yMove}vh)`;
             }
         });
-    } else {
-        console.log("DEAAAAADD");
-    }
+    
 }
 function msToTime(duration) {
     let milliseconds = parseInt((duration % 1000) / 100),
@@ -580,7 +576,7 @@ function msToTime(duration) {
 }
 // console.log(rightBound);
 const gameLoop = (time) => {
-    if (!paused) {
+    if (!paused && !death) {
         leftBound =
             element.getBoundingClientRect().left -
             gameScreen.getBoundingClientRect().left;
