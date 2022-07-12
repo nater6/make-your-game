@@ -355,33 +355,47 @@ function newBarrel() {
 function barrelPass(barrel, indBarrel) {
     const charBounds = element.getBoundingClientRect();
     const passed = indBarrel.getAttribute('data-passed');
+    function pointChecker() {
+        if (passed === 'true') {
+            indBarrel.setAttribute('data-passed', 'scored');
+            return 'score';
+        } else if (passed === 'false') {
+            indBarrel.setAttribute('data-passed', 'true');
+        }
+    }
     //Check if the bounds of the barrel overlap with the bouns of the character(If they do return "dead")
     //Check if the left and right of the barrel are inside the characters div => if they are check the bottom of the character is less than the top of the barrel
 
-    // console.log(passed, CurrentLevel(barrel.top));
+    console.log(indBarrel.getAttribute("data-passed"));
     if (
         CurrentLevel(barrel.top) ===
         CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
     ) {
         //Check if the left of the barrel is passed the right of the barrel && data-passed === "true" (if so return "score" and set data-passed back to false)
         if ([6, 4, 2, 0].includes(CurrentLevel(barrel.top))) {
-            if (charBounds.right < barrel.left) {
-                if (passed === 'true') {
-                    indBarrel.setAttribute('data-passed', 'scored');
-                    return 'score';
-                } else if (passed === 'false') {
-                    indBarrel.setAttribute('data-passed', 'true');
-                }
+            if (
+                charBounds.right < barrel.left &&
+                !OnLadder(charBounds, CurrentLevel(charBounds.top))
+            ) {
+                return pointChecker();
+            } else if (
+                charBounds.right < barrel.left &&
+                OnLadder(charBounds, CurrentLevel(charBounds.top))
+            ) {
+                indBarrel.setAttribute('data-passed', 'onLadder');
             }
         }
         if ([5, 3, 1].includes(CurrentLevel(barrel.top))) {
-            if (charBounds.left > barrel.right) {
-                if (passed === 'true') {
-                    indBarrel.setAttribute('data-passed', 'scored');
-                    return 'score';
-                } else if (passed === 'false') {
-                    indBarrel.setAttribute('data-passed', 'true');
-                }
+            if (
+                charBounds.left > barrel.right &&
+                !OnLadder(charBounds, CurrentLevel(charBounds.top))
+            ) {
+                return pointChecker();
+            } else if (
+                charBounds.right < barrel.left &&
+                OnLadder(charBounds, CurrentLevel(charBounds.top))
+            ) {
+                indBarrel.setAttribute('data-passed', 'onLadder');
             }
         }
     }
@@ -389,7 +403,8 @@ function barrelPass(barrel, indBarrel) {
         CurrentLevel(barrel.top) !==
         CurrentLevel(charBounds.bottom - (3.5 / 100) * window.innerHeight)
     ) {
-        if (passed === 'scored') indBarrel.setAttribute('data-passed', 'false');
+        if (passed === 'onLadder')
+            indBarrel.setAttribute('data-passed', 'false');
     }
 }
 
@@ -443,7 +458,7 @@ let newB = 0;
 function moveBarrel() {
     newB++;
     if (newB === 500) {
-        newBarrel();
+        // newBarrel();
         newB = 0;
     }
     //Get the barrel as an element
@@ -458,6 +473,10 @@ function moveBarrel() {
         //If the barrel is at the end remove it
         if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
             indBarrel.remove();
+        }
+        if (barrelPass(thisBarrel, indBarrel) === 'score') {
+            document.querySelector('#score-Id').innerHTML =
+                +document.querySelector('#score-Id').innerHTML + 100;
         }
         if (barrelDrop(tbCenter, thisBarrel.top)) {
             let yMove = (dBetweenStages / window.innerHeight) * 100;
