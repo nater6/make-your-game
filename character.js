@@ -27,6 +27,7 @@ let top = parseInt(element.getBoundingClientRect().top);
 let leftBound;
 let rightBound;
 let frame = 0;
+let youWin = false;
 const keys = {
     jump: {
         pressed: false,
@@ -520,9 +521,9 @@ function togglePauseMenu() {
 // let newB = 0;
 function moveBarrel() {
     // newB++;
-    // if (barrelTimer) {
-    //     newBarrel();
-    // }
+    if (barrelTimer === 250) {
+        newBarrel();
+    }
     //Get the barrel as an element
     const currBarrel = document.querySelectorAll('.barrel');
     currBarrel.forEach((indBarrel) => {
@@ -638,7 +639,7 @@ function Reset() {
     currBarrel.forEach((ele) => ele.remove());
     lives = lives - 1;
     livesText.innerText = lives;
-   
+
     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     if (lives === 0) {
         gameover();
@@ -658,8 +659,9 @@ RetryButton.onclick = function Playagain() {
     lives = 3;
     livesText.innerText = lives;
     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
-    up()
+    up();
     document.querySelector('#score-Id').innerHTML = 0;
+    youWin = true;
     paused = false;
     winScreenDisplay.style.display = 'none';
 };
@@ -732,6 +734,10 @@ const timer = () => {
         if (currentTime - lastTime >= 1000) {
             lastTime = currentTime;
             numSeconds++;
+            if (youWin) {
+                numSeconds = 0;
+                youWin = false;
+            }
             timerId.innerText = msToTime(numSeconds);
         }
     }
