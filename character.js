@@ -252,9 +252,12 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                 x_pos > upperLadder[0].left - upperLadder[0].width)
         ) {
             if (
-                x_pos < ladder_7.left &&
-                x_pos > ladder_7.left - ladder_7.width &&
-                ladder_7.y + -offset > object.bottom - 3
+                (x_pos < ladder_7.left &&
+                    x_pos > ladder_7.left - ladder_7.width &&
+                    ladder_7.y + -offset > object.bottom - 3) ||
+                (x_pos < upperLadder[0].left &&
+                    x_pos > upperLadder[0].left - upperLadder[0].width &&
+                    upperLadder[0].y + -offset > object.bottom - 3)
             ) {
                 return false;
             }
