@@ -16,7 +16,7 @@
                 <!-- <div class="goComputer">
                     <img src="./images/golang.png" alt="golang">
                 </div> -->
-                <div class="stage upperstage">
+                <div id="7" class="stage upperstage">
                     <div class="stageblocks black1"></div>
                     <div class="stageblocks black1"></div>
                     <div class="stageblocks black1"></div>
@@ -183,8 +183,18 @@
             <div class="gameover_content">
                 <h1>Game Over</h1>
                 <div>Timer: <span id="timer-Id-GO">00:00</span></div>
-            <div>Score: <span id="score-Id-GO">0</span></div>
+                <div>Score: <span id="score-Id-GO">0</span></div>
             </div>
+        </div>
+
+        <div class="Win_Screen">
+            <div class="Screen_content">
+                <h1>You Win</h1>
+                <div>Timer: <span id="timer-Id-W">00:00</span></div>
+                <div>Score: <span id="score-Id-W">0</span></div>
+            </div>
+            <p>Play again</p>
+            <button class="RetryButton">Retry</button>
         </div>
 
         <div class="scoring">
@@ -197,7 +207,14 @@
                 <h1>PAUSED</h1>
             </div>
         </div>
-    
+
+        <div class="StartMenu">
+            <h1>Game Name</h1>
+            <div class="content">
+                <button class="StartButton">Start</button>
+            </div>
+        </div>
+
         <script type="module">
             import { main } from './character.js';
             main();

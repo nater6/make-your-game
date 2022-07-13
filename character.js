@@ -3,7 +3,7 @@ const startingY = document.querySelector('#box').getBoundingClientRect().top;
 let currentX = 0;
 let currentY = 0;
 let livesText = document.getElementById('lives-Id'),
-    lives = 1;
+    lives = 3;
 livesText.innerText = lives;
 let globalTime = 0;
 
@@ -15,6 +15,9 @@ let ladder_5 = document.getElementById('ladder_5').getBoundingClientRect();
 let ladder_6 = document.getElementById('ladder_6').getBoundingClientRect();
 let ladder_7 = document.getElementById('ladder_7').getBoundingClientRect();
 let upperLadder = document.querySelectorAll('.upperstage .ladder');
+let upperLadder1 = upperLadder[0].getBoundingClientRect(),
+    upperLadder2 = upperLadder[1].getBoundingClientRect();
+let winScreenDisplay = document.getElementsByClassName('Win_Screen')[0];
 let element = document.getElementById('box');
 element.style.position = 'absolute';
 let timerId = document.getElementById('timer-Id');
@@ -49,7 +52,7 @@ const keys = {
         pressed: false,
     },
 };
-let paused = false;
+let paused = true;
 let death = false;
 
 const getBoundTop = (ind) =>
@@ -63,7 +66,8 @@ const CurrentLevel = (y_pos) => {
     if (y_pos < getBoundTop(3) && y_pos > getBoundTop(4)) y = 3;
     if (y_pos < getBoundTop(4) && y_pos > getBoundTop(5)) y = 4;
     if (y_pos < getBoundTop(5) && y_pos > getBoundTop(6)) y = 5;
-    if (y_pos < getBoundTop(6)) y = 6;
+    if (y_pos < getBoundTop(6) && y_pos > getBoundTop(7)) y = 6;
+    if (y_pos < getBoundTop(7)) y = 7;
     return y;
 };
 
@@ -248,16 +252,60 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                 x_pos > upperLadder[0].left - upperLadder[0].width)
         ) {
             if (
-                (x_pos < ladder_7.left &&
-                    x_pos > ladder_7.left - ladder_7.width &&
-                    ladder_7.y + -offset > object.bottom - 3) ||
-                (x_pos < upperLadder[0].left &&
-                    x_pos > upperLadder[0].left - upperLadder[0].width &&
-                    upperLadder[0].y + -offset > object.bottom - 3)
+                x_pos < ladder_7.left &&
+                x_pos > ladder_7.left - ladder_7.width &&
+                ladder_7.y + -offset > object.bottom - 3
             ) {
                 return false;
             }
+
             return true;
+        }
+    }
+
+    if (floor === 6 || floor === 7) {
+        if (
+            (x_pos < upperLadder1.left - 9 &&
+                x_pos > upperLadder1.left - upperLadder1.width &&
+                upperLadder1.y < object.bottom) ||
+            (x_pos < upperLadder2.left - 9 &&
+                x_pos > upperLadder2.left - upperLadder2.width &&
+                upperLadder2.y < object.bottom)
+        ) {
+            if (floor === 6) {
+                if (
+                    (x_pos < upperLadder1.left - 9 &&
+                        x_pos > upperLadder1.left - upperLadder1.width &&
+                        upperLadder1.bottom < object.bottom - upOffset - 3) ||
+                    (x_pos < upperLadder2.left - 9 &&
+                        x_pos > upperLadder2.left - upperLadder2.width &&
+                        upperLadder2.bottom < object.bottom - upOffset - 3)
+                ) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+    if (floor === 7) {
+        if (
+            (x_pos < upperLadder1.left - 9 &&
+                x_pos > upperLadder1.left - upperLadder1.width &&
+                upperLadder1.y < object.bottom + offset) ||
+            (x_pos < upperLadder2.left - 9 &&
+                x_pos > upperLadder2.left - upperLadder2.width &&
+                upperLadder2.y < object.bottom + offset)
+        ) {
+            return true;
+        }
+    }
+    if (floor === 7) {
+        if (x_pos > bounds.left - 9) {
+            paused = true;
+            document.getElementById('timer-Id-W').innerText = timerId.innerText;
+            document.getElementById('score-Id-W').innerText =
+                document.querySelector('#score-Id').innerHTML;
+            winScreenDisplay.style.display = 'block';
         }
     }
 };
@@ -311,6 +359,7 @@ function jump(direction = 0) {
 
 function up() {
     top = parseInt(element.getBoundingClientRect().top);
+
     if (
         OnLadder(element.getBoundingClientRect(), CurrentLevel(top - 10), 0, 10)
     ) {
@@ -458,6 +507,7 @@ function barrelDrop(divCenter, divTop) {
     });
     return result;
 }
+
 let pausedMenu = document.getElementsByClassName('pausedMenu')[0];
 function togglePauseMenu() {
     paused = !paused;
@@ -485,6 +535,7 @@ function moveBarrel() {
         if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
             indBarrel.remove();
         }
+        barrelPass(thisBarrel, indBarrel);
         if (barrelPass(thisBarrel, indBarrel) === 'score') {
             document.querySelector('#score-Id').innerHTML =
                 +document.querySelector('#score-Id').innerHTML + 100;
@@ -587,6 +638,7 @@ function Reset() {
     currBarrel.forEach((ele) => ele.remove());
     lives = lives - 1;
     livesText.innerText = lives;
+   
     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     if (lives === 0) {
         gameover();
@@ -595,6 +647,29 @@ function Reset() {
     death = false;
     newBarrel();
 }
+
+let RetryButton = document.getElementsByClassName('RetryButton')[0];
+
+RetryButton.onclick = function Playagain() {
+    currentX = 0.16;
+    currentY = 0;
+    const currBarrel = document.querySelectorAll('.barrel');
+    currBarrel.forEach((ele) => ele.remove());
+    lives = 3;
+    livesText.innerText = lives;
+    element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+    up()
+    document.querySelector('#score-Id').innerHTML = 0;
+    paused = false;
+    winScreenDisplay.style.display = 'none';
+};
+
+let StartMenu = document.getElementsByClassName('StartMenu')[0];
+let StartButton = document.getElementsByClassName('StartButton')[0];
+StartButton.onclick = function Start() {
+    StartMenu.style.display = 'none';
+    paused = false;
+};
 
 const characterDrop = () => {
     let currentLevelt = CurrentLevel(element.getBoundingClientRect().top);
@@ -717,6 +792,7 @@ const gameLoop = (time) => {
         }
         characterDrop();
         moveBarrel();
+
         // timerId.innerText = msToTime(time);
         if (barrelTimer == 250) {
             // newBarrel();
