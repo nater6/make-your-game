@@ -624,10 +624,11 @@ function gameover() {
 
     setTimeout(() => {
         GameOverMenu.style.display = 'none';
+        youWin = true;
         paused = false;
     }, 2000);
     document.querySelector('#score-Id').innerHTML = 0;
-    lives = 1;
+    lives = 3;
     livesText.innerText = lives;
 }
 
@@ -643,6 +644,7 @@ function Reset() {
     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     if (lives === 0) {
         gameover();
+        youWin = false;
     }
     globalTime = globalTime - globalTime;
     death = false;
