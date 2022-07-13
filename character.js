@@ -638,7 +638,7 @@ function Reset() {
     currBarrel.forEach((ele) => ele.remove());
     lives = lives - 1;
     livesText.innerText = lives;
-   
+
     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     if (lives === 0) {
         gameover();
@@ -658,7 +658,7 @@ RetryButton.onclick = function Playagain() {
     lives = 3;
     livesText.innerText = lives;
     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
-    up()
+    up();
     document.querySelector('#score-Id').innerHTML = 0;
     paused = false;
     winScreenDisplay.style.display = 'none';
