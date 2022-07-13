@@ -5,6 +5,7 @@ html {
     margin: 0;
 }
 body {
+    font-family: 'Press Start 2P', cursive;
     margin: 0;
     padding: 0;
     border: 0;
@@ -15,7 +16,14 @@ body {
     grid-template-columns: repeat(3, 33.3333333333%);
     overflow: hidden;
 }
-
+.scoring {
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+}
+.scoring div {
+    margin: 10px;
+}
 .gameScreen {
     display: grid;
     grid-template-rows: 15% 85%;
