@@ -70,7 +70,7 @@ button:hover {
     background-image: url('./images/crane.png');
     background-position: center;
     background-size: 50% 130%;
-    z-index: 10;
+    z-index: 1001;
     background-color: black;
 }
 
@@ -146,7 +146,8 @@ button:hover {
     height: 60px;
     width: 95px;
     background: url('./images/donkeyKongSpritesheet.png');
-    animation: throw 1.5s steps(30) 1;
+    background-color: black;
+    animation: throw 1.5s steps(30) infinite;
 }
 @keyframes throw {
     from {
@@ -166,6 +167,8 @@ button:hover {
 .barrelImg {
     width: 100%;
     height: 100%;
+    background: url('./images/background1.png');
+    background-size: 100%;
 }
 .scoring {
     background-color: black;
