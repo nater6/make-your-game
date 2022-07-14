@@ -390,21 +390,19 @@ let dBetweenStages = getBoundTop(0) - getBoundTop(1);
 const donkeyKong = document.querySelector('.donkey-kong-class');
 const bounds = donkeyKong.getBoundingClientRect();
 
-function newBarrel() {
-    //Create the div to hold the barrel and the image for the barrel
-    const barrel = document.createElement('div');
-    //Create an img elem to go inside
-    const barrelImg = document.createElement('img');
-    barrelImg.setAttribute('class', 'barrelImg');
-    barrel.append(barrelImg);
-    barrel.setAttribute('data-passed', 'false');
-    barrel.setAttribute('class', 'barrel');
-    //Get the HTMLelement of the top stage crane
-    //Put the barrel next to donkey kong
+const allBarrel = Array.from(document.querySelectorAll('.barrel'));
+console.log(allBarrel);
+allBarrel.forEach((barrel) => {
     barrel.style.left = `${bounds.right - (bounds.right - bounds.left)}px`;
     barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
-    bottomStages.insertBefore(barrel, topPlatform);
-    //Get the initial position of each barrel
+});
+
+function newBarrel() {
+    //Create the div to hold the barrel and the image for the barrel
+    let getAllBarrelNotMoving = document.querySelectorAll(
+        'div.barrel:not(.moveBarrel)'
+    );
+    getAllBarrelNotMoving[1].classList.add('moveBarrel');
 }
 
 function barrelPass(barrel, indBarrel) {
@@ -522,7 +520,7 @@ function moveBarrel() {
         newBarrel();
     }
     //Get the barrel as an element
-    const currBarrel = document.querySelectorAll('.barrel');
+    const currBarrel = document.querySelectorAll('.moveBarrel');
     currBarrel.forEach((indBarrel) => {
         const thisBarrel = indBarrel.getBoundingClientRect();
         let currentLevelt = CurrentLevel(thisBarrel.top);
@@ -533,81 +531,90 @@ function moveBarrel() {
         const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
         //If the barrel is at the end remove it
         if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
-            indBarrel.remove();
-        }
-        barrelPass(thisBarrel, indBarrel);
-        if (barrelPass(thisBarrel, indBarrel) === 'score') {
-            document.querySelector('#score-Id').innerHTML =
-                +document.querySelector('#score-Id').innerHTML + 100;
-        } else if (barrelPass(thisBarrel, indBarrel) === 'collision') {
-            death = true;
-        }
-        if (barrelDrop(tbCenter, thisBarrel.top)) {
-            let yMove = (dBetweenStages / window.innerHeight) * 100;
-            switch (currentLevelt) {
-                case 5:
-                    yMove *= 2;
-                    break;
-                case 4:
-                    yMove *= 3;
-                    break;
-                case 3:
-                    yMove *= 4;
-                    break;
-                case 2:
-                    yMove *= 5;
-                    break;
-                case 1:
-                    yMove *= 6;
-                    break;
+            // indBarrel.remove();
+            indBarrel.style.transform = `translate(${0}vw, ${0}vh)`;
+            indBarrel.classList.remove('moveBarrel');
+        } else {
+            barrelPass(thisBarrel, indBarrel);
+            if (barrelPass(thisBarrel, indBarrel) === 'score') {
+                document.querySelector('#score-Id').innerHTML =
+                    +document.querySelector('#score-Id').innerHTML + 100;
+            } else if (barrelPass(thisBarrel, indBarrel) === 'collision') {
+                death = true;
             }
-            indBarrel.style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
-        } else if (
-            currentLevelt === 6 ||
-            currentLevelt === 4 ||
-            currentLevelt === 2 ||
-            currentLevelt === 0
-        ) {
-            let yMove;
-            switch (currentLevelt) {
-                case 6:
-                    yMove = 0;
-                    break;
-                case 4:
-                    yMove = ((dBetweenStages * 2) / window.innerHeight) * 100;
-                    break;
-                case 2:
-                    yMove = ((dBetweenStages * 4) / window.innerHeight) * 100;
-                    break;
-                case 0:
-                    yMove = ((dBetweenStages * 6) / window.innerHeight) * 100;
-                    break;
+            if (barrelDrop(tbCenter, thisBarrel.top)) {
+                let yMove = (dBetweenStages / window.innerHeight) * 100;
+                switch (currentLevelt) {
+                    case 5:
+                        yMove *= 2;
+                        break;
+                    case 4:
+                        yMove *= 3;
+                        break;
+                    case 3:
+                        yMove *= 4;
+                        break;
+                    case 2:
+                        yMove *= 5;
+                        break;
+                    case 1:
+                        yMove *= 6;
+                        break;
+                }
+                indBarrel.style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
+            } else if (
+                currentLevelt === 6 ||
+                currentLevelt === 4 ||
+                currentLevelt === 2 ||
+                currentLevelt === 0
+            ) {
+                let yMove;
+                switch (currentLevelt) {
+                    case 6:
+                        yMove = 0;
+                        break;
+                    case 4:
+                        yMove =
+                            ((dBetweenStages * 2) / window.innerHeight) * 100;
+                        break;
+                    case 2:
+                        yMove =
+                            ((dBetweenStages * 4) / window.innerHeight) * 100;
+                        break;
+                    case 0:
+                        yMove =
+                            ((dBetweenStages * 6) / window.innerHeight) * 100;
+                        break;
+                }
+                indBarrel.style.transform = `translate(${
+                    XdistMoved + 0.2
+                }vw, ${yMove}vh)`;
+            } else if (
+                currentLevelt === 5 ||
+                currentLevelt === 3 ||
+                currentLevelt === 1
+            ) {
+                let yMove;
+                switch (currentLevelt) {
+                    case 5:
+                        yMove = (dBetweenStages / window.innerHeight) * 100;
+                        break;
+                    case 3:
+                        yMove =
+                            ((dBetweenStages * 3) / window.innerHeight) * 100;
+                        break;
+                    case 1:
+                        yMove =
+                            ((dBetweenStages * 5) / window.innerHeight) * 100;
+                        break;
+                }
+                indBarrel.style.transform = `translate(${
+                    XdistMoved - 0.2
+                }vw, ${yMove}vh)`;
             }
-            indBarrel.style.transform = `translate(${
-                XdistMoved + 0.2
-            }vw, ${yMove}vh)`;
-        } else if (
-            currentLevelt === 5 ||
-            currentLevelt === 3 ||
-            currentLevelt === 1
-        ) {
-            let yMove;
-            switch (currentLevelt) {
-                case 5:
-                    yMove = (dBetweenStages / window.innerHeight) * 100;
-                    break;
-                case 3:
-                    yMove = ((dBetweenStages * 3) / window.innerHeight) * 100;
-                    break;
-                case 1:
-                    yMove = ((dBetweenStages * 5) / window.innerHeight) * 100;
-                    break;
-            }
-            indBarrel.style.transform = `translate(${
-                XdistMoved - 0.2
-            }vw, ${yMove}vh)`;
         }
     });
+
     if (death) {
         Reset();
     }
@@ -636,7 +643,11 @@ function Reset() {
     currentX = 0;
     currentY = 0;
     const currBarrel = document.querySelectorAll('.barrel');
-    currBarrel.forEach((ele) => ele.remove());
+    currBarrel.forEach((ele) => {
+        // ele.remove();
+        ele.style.transform = `translate(${0}vw, ${0}vh)`;
+        ele.classList.remove('moveBarrel');
+    });
     lives = lives - 1;
     livesText.innerText = lives;
 
