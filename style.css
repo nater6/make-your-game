@@ -263,23 +263,6 @@ button:hover {
     justify-content: center;
 }
 
-.red{
+.red {
     color: red;
 }
-
-.glow {
-    font-size: 80px;
-    color: #d19833;
-    text-align: center;
-    animation: glow 1s ease-in-out infinite alternate;
-  }
-  
-  @keyframes glow {
-    from {
-      text-shadow:0 0 10px #d19833, 0 0 20px #d19833, 0 0 30px #bc1616, 0 0 40px #bc1616, 0 0 50px #bc1616, 0 0 60px #bc1616, 0 0 70px #bc1616;
-    }
-    
-    to {
-      text-shadow:0 0 20px #d19833, 0 0 30px #bc1616, 0 0 40px #bc1616, 0 0 50px #bc1616, 0 0 60px #bc1616, 0 0 70px #bc1616, 0 0 80px #bc1616;
-    }
-  }
