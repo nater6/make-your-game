@@ -384,7 +384,6 @@ function down() {
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
-let initialPos;
 const topPlatform = document.getElementById('6');
 const bottomStages = document.querySelector('.bottom-stages');
 let dBetweenStages = getBoundTop(0) - getBoundTop(1);
@@ -396,7 +395,6 @@ function newBarrel() {
     const barrel = document.createElement('div');
     //Create an img elem to go inside
     const barrelImg = document.createElement('img');
-    barrelImg.setAttribute('src', './images/background1.png');
     barrelImg.setAttribute('class', 'barrelImg');
     barrel.append(barrelImg);
     barrel.setAttribute('data-passed', 'false');
@@ -407,7 +405,6 @@ function newBarrel() {
     barrel.style.top = `${bounds.bottom - window.innerHeight * 0.0325}px`;
     bottomStages.insertBefore(barrel, topPlatform);
     //Get the initial position of each barrel
-    initialPos = barrel.getBoundingClientRect();
 }
 
 function barrelPass(barrel, indBarrel) {
@@ -530,7 +527,9 @@ function moveBarrel() {
         const thisBarrel = indBarrel.getBoundingClientRect();
         let currentLevelt = CurrentLevel(thisBarrel.top);
         const XdistMoved =
-            ((thisBarrel.left - initialPos.left) / window.innerWidth) * 100;
+            ((thisBarrel.left - gameScreen.getBoundingClientRect().left) /
+                window.innerWidth) *
+            100;
         const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
         //If the barrel is at the end remove it
         if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
@@ -648,7 +647,9 @@ function Reset() {
     }
     globalTime = globalTime - globalTime;
     death = false;
-    newBarrel();
+    if (barrelTimer < 50) {
+        newBarrel();
+    }
 }
 
 let RetryButton = document.getElementsByClassName('RetryButton')[0];

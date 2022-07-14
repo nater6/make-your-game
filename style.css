@@ -154,6 +154,8 @@ body {
 .barrelImg {
     width: 100%;
     height: 100%;
+    background: url('./images/background1.png');
+    background-size: 100%;
 }
 .scoring {
     background-color: black;
