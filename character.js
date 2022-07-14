@@ -312,8 +312,29 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
             paused = true;
             document.getElementById('timer-Id-W').innerText = timerId.innerText;
             document.getElementById('score-Id-W').innerText =
-                document.querySelector('#score-Id').innerHTML;
+                +(document.querySelector('#score-Id').innerHTML) + 1000 ;
             winScreenDisplay.style.display = 'block';
+            //  document.querySelector('#score-Id').innerHTML =
+            //     +document.querySelector('#score-Id').innerHTML + 1000;
+            window.addEventListener('keydown', e => {
+                if (e.key === 's') {
+                    currentX = 0.16;
+                    currentY = 0;
+                    const currBarrel = document.querySelectorAll('.barrel');
+                    currBarrel.forEach((ele) => {
+                        ele.style.transform = `translate(${0}vw, ${0}vh)`;
+                        ele.classList.remove('moveBarrel');
+                    });
+                    lives = 3;
+                    livesText.innerText = lives;
+                    element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+                    up();
+                    document.querySelector('#score-Id').innerHTML = 0;
+                    youWin = true;
+                    paused = false;
+                    winScreenDisplay.style.display = 'none';
+                }
+            })
         }
     }
 };
@@ -686,25 +707,25 @@ function Reset() {
     death = false;
 }
 
-let RetryButton = document.getElementsByClassName('RetryButton')[0];
+// let RetryButton = document.getElementsByClassName('RetryButton')[0];
 
-RetryButton.onclick = function Playagain() {
-    currentX = 0.16;
-    currentY = 0;
-    const currBarrel = document.querySelectorAll('.barrel');
-    currBarrel.forEach((ele) => {
-        ele.style.transform = `translate(${0}vw, ${0}vh)`;
-        ele.classList.remove('moveBarrel');
-    });
-    lives = 3;
-    livesText.innerText = lives;
-    element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
-    up();
-    document.querySelector('#score-Id').innerHTML = 0;
-    youWin = true;
-    paused = false;
-    winScreenDisplay.style.display = 'none';
-};
+// RetryButton.onclick = function Playagain() {
+//     currentX = 0.16;
+//     currentY = 0;
+//     const currBarrel = document.querySelectorAll('.barrel');
+//     currBarrel.forEach((ele) => {
+//         ele.style.transform = `translate(${0}vw, ${0}vh)`;
+//         ele.classList.remove('moveBarrel');
+//     });
+//     lives = 3;
+//     livesText.innerText = lives;
+//     element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+//     up();
+//     document.querySelector('#score-Id').innerHTML = 0;
+//     youWin = true;
+//     paused = false;
+//     winScreenDisplay.style.display = 'none';
+// };
 
 let StartMenu = document.getElementsByClassName('StartMenu')[0];
 let StartButton = document.getElementsByClassName('StartButton')[0];
