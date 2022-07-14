@@ -31,7 +31,6 @@ let rightBound;
 let frame = 0;
 let youWin = false;
 
-
 const keys = {
     jump: {
         pressed: false,
@@ -323,11 +322,11 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
             paused = true;
             document.getElementById('timer-Id-W').innerText = timerId.innerText;
             document.getElementById('score-Id-W').innerText =
-                +(document.querySelector('#score-Id').innerHTML) + 1000 ;
+                +document.querySelector('#score-Id').innerHTML + 1000;
             winScreenDisplay.style.display = 'block';
             //  document.querySelector('#score-Id').innerHTML =
             //     +document.querySelector('#score-Id').innerHTML + 1000;
-            window.addEventListener('keydown', e => {
+            window.addEventListener('keydown', (e) => {
                 if (e.key === 's') {
                     currentX = 0.16;
                     currentY = 0;
@@ -345,7 +344,7 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
                     paused = false;
                     winScreenDisplay.style.display = 'none';
                 }
-            })
+            });
         }
     }
 };
@@ -443,7 +442,8 @@ function newBarrel() {
     getAllBarrelNotMoving[1].classList.add('moveBarrel');
 }
 let charBounds, passed;
-let barrelPassArr = [6, 4, 2, 0], barrelPassArr2 = [5, 3, 1]
+let barrelPassArr = [6, 4, 2, 0],
+    barrelPassArr2 = [5, 3, 1];
 function barrelPass(barrel, indBarrel) {
     charBounds = element.getBoundingClientRect();
     passed = indBarrel.getAttribute('data-passed');
@@ -560,8 +560,8 @@ function moveBarrel() {
     }
     //Get the barrel as an element
     currBarrel = document.querySelectorAll('.moveBarrel');
-    for(let x = 0; x < currBarrel.length; x++){
-   // currBarrel.forEach((indBarrel) => {
+    for (let x = 0; x < currBarrel.length; x++) {
+        // currBarrel.forEach((indBarrel) => {
         thisBarrel = currBarrel[x].getBoundingClientRect();
         currentLevelt = CurrentLevel(thisBarrel.top);
         XdistMoved =
@@ -601,7 +601,9 @@ function moveBarrel() {
                         yMove *= 6;
                         break;
                 }
-                currBarrel[x].style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
+                currBarrel[
+                    x
+                ].style.transform = `translate(${XdistMoved}vw, ${yMove}vh)`;
             } else if (
                 currentLevelt === 6 ||
                 currentLevelt === 4 ||
@@ -651,7 +653,7 @@ function moveBarrel() {
                 }vw, ${yMove}vh)`;
             }
         }
-    };
+    }
 
     if (death) {
         paused = true;
@@ -870,6 +872,7 @@ const gameLoop = (time) => {
     frame++;
     requestAnimationFrame(gameLoop);
 };
+
 export const main = () => {
     addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
@@ -887,15 +890,24 @@ export const main = () => {
         if (e.key === ' ') {
             keys.jump.pressed = true;
         }
-        if (e.key === 'p') {
+        if (e.key === 'p' && winScreenDisplay.style.display === 'none') {
+            console.log(winScreenDisplay.style.display);
             togglePauseMenu();
         }
-        if (e.key === 'r') {
-            lives = 1
-            Reset()
+        if (
+            e.key === 'r' &&
+            paused &&
+            winScreenDisplay.style.display === 'none'
+        ) {
+            lives = 1;
+            Reset();
             pausedMenu.style.display = 'none';
         }
-        if (e.key === 's') {
+        if (
+            e.key === 's' &&
+            (StartMenu.style.display === 'block' ||
+                winScreenDisplay.style.display === 'block')
+        ) {
             StartMenu.style.display = 'none';
             paused = false;
         }
