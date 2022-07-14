@@ -240,6 +240,9 @@ button:hover {
 }
 
 .StartMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100vw;
     height: 100vh;
     color: white;
@@ -253,7 +256,10 @@ button:hover {
 .content {
     margin-top: 50vh;
 }
-
+.glow {
+    font-size: 200px;
+    margin-bottom: 0;
+}
 .instructions {
     height: 30%;
     width: 100%;
