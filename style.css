@@ -1,13 +1,11 @@
 * {
     box-sizing: border-box;
     font-family: 'Press Start 2P', cursive;
-
 }
 html {
     margin: 0;
 }
 body {
-    font-family: 'Press Start 2P', cursive;
     margin: 0;
     padding: 0;
     border: 0;
@@ -26,7 +24,7 @@ button {
     font-size: 2vh;
 }
 button:hover {
-    color:red;
+    color: red;
     font-weight: bold;
 }
 .scoring {
@@ -162,7 +160,7 @@ button:hover {
     height: 3%;
     width: 1.5%;
     position: absolute;
-    z-index: 99;
+    z-index: 1002;
 }
 .barrelImg {
     width: 100%;
@@ -256,7 +254,7 @@ button:hover {
     margin-top: 50vh;
 }
 
-.instructions{
+.instructions {
     height: 30%;
     width: 100%;
     z-index: 100;
