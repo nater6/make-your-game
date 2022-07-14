@@ -173,9 +173,18 @@ button:hover {
 .scoring {
     background-color: black;
     color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.scoreBoard {
+    border: 0.4vh solid white;
 }
 .menu {
     background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .pausedMenu {
     width: 100vw;
@@ -236,6 +245,14 @@ button:hover {
     margin-top: 50vh;
 }
 
+.instructions{
+    height: 30%;
+    width: 100%;
+    z-index: 100;
+    color: white;
+    text-align: center;
+    justify-content: center;
+}
 
 
 
