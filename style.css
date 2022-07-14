@@ -188,9 +188,7 @@ button:hover {
     position: absolute;
     z-index: 2000;
 }
-.content {
-    margin-top: 50vh;
-}
+
 .GameOver {
     width: 100vw;
     height: 100vh;
@@ -233,3 +231,12 @@ button:hover {
     position: absolute;
     z-index: 2000;
 }
+
+.content {
+    margin-top: 50vh;
+}
+
+
+
+
+
