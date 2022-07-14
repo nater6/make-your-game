@@ -411,10 +411,10 @@ function newBarrel() {
     );
     getAllBarrelNotMoving[1].classList.add('moveBarrel');
 }
-
+let charBounds, passed;
 function barrelPass(barrel, indBarrel) {
-    const charBounds = element.getBoundingClientRect();
-    const passed = indBarrel.getAttribute('data-passed');
+    charBounds = element.getBoundingClientRect();
+    passed = indBarrel.getAttribute('data-passed');
     function pointChecker() {
         if (passed === 'true') {
             indBarrel.setAttribute('data-passed', 'scored');
@@ -473,10 +473,9 @@ function barrelPass(barrel, indBarrel) {
             indBarrel.setAttribute('data-passed', 'false');
     }
 }
-
+//1) Get each barrel with the barrel class
+const blackDivs = document.querySelectorAll('.black');
 function barrelDrop(divCenter, divTop) {
-    //1) Get each barrel with the barrel class
-    const blackDivs = document.querySelectorAll('.black');
     //2) Go through the list of each black div
     let result = false;
     blackDivs.forEach((div) => {
@@ -529,21 +528,22 @@ function togglePauseMenu() {
 //     pausedMenu.style.display = 'none';
 // });
 // let newB = 0;
+let currBarrel, thisBarrel, currentLevelt, XdistMoved, tbCenter;
 function moveBarrel() {
     // newB++;
     if (barrelTimer === 250) {
         newBarrel();
     }
     //Get the barrel as an element
-    const currBarrel = document.querySelectorAll('.moveBarrel');
+    currBarrel = document.querySelectorAll('.moveBarrel');
     currBarrel.forEach((indBarrel) => {
-        const thisBarrel = indBarrel.getBoundingClientRect();
-        let currentLevelt = CurrentLevel(thisBarrel.top);
-        const XdistMoved =
+        thisBarrel = indBarrel.getBoundingClientRect();
+        currentLevelt = CurrentLevel(thisBarrel.top);
+        XdistMoved =
             ((thisBarrel.left - gameScreen.getBoundingClientRect().left) /
                 window.innerWidth) *
             100;
-        const tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
+        tbCenter = (thisBarrel.right + thisBarrel.left) / 2;
         //If the barrel is at the end remove it
         if (thisBarrel.left > startingX && thisBarrel.bottom > startingY) {
             // indBarrel.remove();
@@ -631,7 +631,7 @@ function moveBarrel() {
     });
 
     if (death) {
-        paused=true
+        paused = true;
         Reset();
     }
 }
