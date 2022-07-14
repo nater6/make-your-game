@@ -518,6 +518,12 @@ function togglePauseMenu() {
         pausedMenu.style.display = 'none';
     }
 }
+// Add event listners to the restart and continue buttons on the paused menu
+document.getElementById('continueBtn').addEventListener('click', () =>  togglePauseMenu())
+document.getElementById('restartBtn').addEventListener('click', () => {
+    gameover()
+    pausedMenu.style.display = 'none';
+});
 // let newB = 0;
 function moveBarrel() {
     // newB++;

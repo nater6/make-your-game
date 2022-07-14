@@ -1,5 +1,7 @@
 * {
     box-sizing: border-box;
+    font-family: 'Press Start 2P', cursive;
+
 }
 html {
     margin: 0;
@@ -15,6 +17,17 @@ body {
     justify-content: center;
     grid-template-columns: repeat(3, 33.3333333333%);
     overflow: hidden;
+}
+
+button {
+    background: none;
+    border: none;
+    color: rgb(255, 255, 255, 1);
+    font-size: 2vh;
+}
+button:hover {
+    color:red;
+    font-weight: bold;
 }
 .scoring {
     display: flex;
@@ -164,7 +177,7 @@ body {
 .pausedMenu {
     width: 100vw;
     height: 100vh;
-    color: white;
+    color: rgb(255, 255, 255, 1);
     opacity: 0.8;
     display: none;
     background-image: linear-gradient(to right, #54545a, rgb(0, 0, 0));
