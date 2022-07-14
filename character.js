@@ -6,6 +6,7 @@ let livesText = document.getElementById('lives-Id'),
     lives = 3;
 livesText.innerText = lives;
 let globalTime = 0;
+let charDied = 0;
 
 let ladder_1 = document.getElementById('ladder_1').getBoundingClientRect();
 let ladder_2 = document.getElementById('ladder_2').getBoundingClientRect();
@@ -50,6 +51,12 @@ const keys = {
         pressed: false,
     },
     start: {
+        pressed: false,
+    },
+    restart: {
+        pressed: false,
+    },
+    continue: {
         pressed: false,
     },
 };
@@ -516,11 +523,13 @@ function togglePauseMenu() {
     }
 }
 // Add event listners to the restart and continue buttons on the paused menu
-document.getElementById('continueBtn').addEventListener('click', () =>  togglePauseMenu())
-document.getElementById('restartBtn').addEventListener('click', () => {
-    gameover()
-    pausedMenu.style.display = 'none';
-});
+// document
+//     .getElementById('continueBtn')
+//     .addEventListener('click', () => togglePauseMenu());
+// document.getElementById('restartBtn').addEventListener('click', () => {
+//     gameover();
+//     pausedMenu.style.display = 'none';
+// });
 // let newB = 0;
 function moveBarrel() {
     // newB++;
@@ -546,6 +555,7 @@ function moveBarrel() {
             document.querySelector('#score-Id').innerHTML =
                 +document.querySelector('#score-Id').innerHTML + 100;
         } else if (barrelPass(thisBarrel, indBarrel) === 'collision') {
+            frame = 0;
             death = true;
         }
         if (barrelDrop(tbCenter, thisBarrel.top)) {
@@ -638,9 +648,19 @@ function gameover() {
 }
 
 // Reset the game if the character touch a barrel
+const resetMenu = document.querySelector('.death');
 function Reset() {
     currentX = 0;
     currentY = 0;
+    if (lives !== 1) {
+        resetMenu.style.display = 'block';
+        setTimeout(() => {
+            resetMenu.style.display = 'none';
+            // youWin = true;
+            paused = false;
+        }, 2000);
+    }
+
     const currBarrel = document.querySelectorAll('.barrel');
     currBarrel.forEach((ele) => ele.remove());
     lives = lives - 1;
@@ -653,9 +673,6 @@ function Reset() {
     }
     globalTime = globalTime - globalTime;
     death = false;
-    if (barrelTimer < 50) {
-        newBarrel();
-    }
 }
 
 let RetryButton = document.getElementsByClassName('RetryButton')[0];
@@ -677,10 +694,10 @@ RetryButton.onclick = function Playagain() {
 
 let StartMenu = document.getElementsByClassName('StartMenu')[0];
 let StartButton = document.getElementsByClassName('StartButton')[0];
-StartButton.onclick = function Start() {
-    StartMenu.style.display = 'none';
-    paused = false;
-};
+// StartButton.onclick = function Start() {
+//     StartMenu.style.display = 'none';
+//     paused = false;
+// };
 
 const characterDrop = () => {
     let currentLevelt = CurrentLevel(element.getBoundingClientRect().top);
@@ -805,6 +822,17 @@ const gameLoop = (time) => {
             jump(0, time);
             keys.jump.switch = true;
         }
+        if (keys.continue.pressed) {
+            togglePauseMenu();
+        }
+        if (keys.restart.pressed) {
+            gameover();
+            pausedMenu.style.display = 'none';
+        }
+        if (keys.start.pressed) {
+            StartMenu.style.display = 'none';
+            paused = false;
+        }
         characterDrop();
         moveBarrel();
 
@@ -843,6 +871,14 @@ export const main = () => {
         }
         if (e.key === 'p') {
             togglePauseMenu();
+        }
+        if (e.key === 'r') {
+            gameover();
+            pausedMenu.style.display = 'none';
+        }
+        if (e.key === 's') {
+            StartMenu.style.display = 'none';
+            paused = false;
         }
     });
     addEventListener('keyup', ({ key }) => {

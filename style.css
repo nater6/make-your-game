@@ -209,6 +209,17 @@ button:hover {
     position: absolute;
     z-index: 2000;
 }
+.death {
+    width: 100vw;
+    height: 100vh;
+    color: white;
+    opacity: 0.8;
+    display: none;
+    background-image: linear-gradient(to right, #54545a, rgb(0, 0, 0));
+    text-align: center;
+    position: absolute;
+    z-index: 2000;
+}
 
 .gameover_content {
     margin-top: 50vh;
@@ -254,6 +265,6 @@ button:hover {
     justify-content: center;
 }
 
-
-
-
+.red{
+    color: red;
+}
