@@ -318,40 +318,44 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
         }
     }
     if (floor === 7) {
-        if (CurrentLevel(element.getBoundingClientRect().top) === 7) {
-            paused = true;
-            document.getElementById('timer-Id-W').innerText = timerId.innerText;
-            document.getElementById('score-Id-W').innerText =
-                +document.querySelector('#score-Id').innerHTML + 1000;
-            winScreenDisplay.style.display = 'block';
-            //  document.querySelector('#score-Id').innerHTML =
-            //     +document.querySelector('#score-Id').innerHTML + 1000;
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 's') {
-                    currentX = 0.16;
-                    currentY = 0;
-                    const currBarrel = document.querySelectorAll('.barrel');
-                    currBarrel.forEach((ele) => {
-                        ele.style.transform = `translate(${0}vw, ${0}vh)`;
-                        ele.classList.remove('moveBarrel');
-                    });
-                    lives = 3;
-                    livesText.innerText = lives;
-                    element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
-                    up();
-                    document.querySelector('#score-Id').innerHTML = 0;
-                    youWin = true;
-                    paused = false;
-                    winScreenDisplay.style.display = 'none';
-                }
-            });
-        }
     }
 };
+
+function checkWin() {
+    if (CurrentLevel(element.getBoundingClientRect().top) === 7) {
+        paused = true;
+        document.getElementById('timer-Id-W').innerText = timerId.innerText;
+        document.getElementById('score-Id-W').innerText =
+            +document.querySelector('#score-Id').innerHTML + 1000;
+        winScreenDisplay.style.display = 'block';
+        //  document.querySelector('#score-Id').innerHTML =
+        //     +document.querySelector('#score-Id').innerHTML + 1000;
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 's') {
+                currentX = 0.16;
+                currentY = 0;
+                const currBarrel = document.querySelectorAll('.barrel');
+                currBarrel.forEach((ele) => {
+                    ele.style.transform = `translate(${0}vw, ${0}vh)`;
+                    ele.classList.remove('moveBarrel');
+                });
+                lives = 3;
+                livesText.innerText = lives;
+                element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+                up();
+                document.querySelector('#score-Id').innerHTML = 0;
+                youWin = true;
+                paused = false;
+                winScreenDisplay.style.display = 'none';
+            }
+        });
+    }
+}
 //Move Left
 function placeLeft() {
     // top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
+        checkWin();
         currentX =
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
@@ -365,6 +369,7 @@ function placeLeft() {
 function placeRight() {
     // top = parseInt(element.getBoundingClientRect().top);
     if (!OnLadder(element.getBoundingClientRect(), CurrentLevel(top))) {
+        checkWin();
         // element.style.position = 'absolute';
         currentX =
             ((startingX - element.getBoundingClientRect().left) /
