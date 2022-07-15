@@ -318,7 +318,7 @@ const OnLadder = (object, floor, offset = 0, upOffset = 0) => {
         }
     }
     if (floor === 7) {
-        if (object.left > bounds.left - 9) {
+        if (CurrentLevel(element.getBoundingClientRect().top) === 7) {
             paused = true;
             document.getElementById('timer-Id-W').innerText = timerId.innerText;
             document.getElementById('score-Id-W').innerText =
@@ -356,7 +356,7 @@ function placeLeft() {
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
             100;
-        currentX += 0.16;
+        currentX += 0.1;
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -370,7 +370,7 @@ function placeRight() {
             ((startingX - element.getBoundingClientRect().left) /
                 window.innerWidth) *
             100;
-        currentX < 0 ? 0 : (currentX -= 0.16);
+        currentX < 0 ? 0 : (currentX -= 0.1);
         element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 }
@@ -759,17 +759,17 @@ const characterDrop = () => {
                 currentY *= 1;
                 break;
             case 1:
-                currentY = 0.5;
+                currentY = 0;
                 break;
         }
         element.style.transform = `translate(${-currentX}vw,${-currentY}vh)`;
         top = parseInt(element.getBoundingClientRect().top);
-        currentY =
-            ((startingY - element.getBoundingClientRect().top) /
-                window.innerHeight) *
-            100;
-        currentY += 0.25;
-        element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
+        // currentY =
+        //     ((startingY - element.getBoundingClientRect().top) /
+        //         window.innerHeight) *
+        //     100;
+        // currentY -= 0.25;
+        // element.style.transform = `translate(-${currentX}vw, -${currentY}vh)`;
     }
 };
 let seconds, minutes;
